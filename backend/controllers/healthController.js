@@ -2,13 +2,13 @@ const db = require('../config/db');
 
 exports.addEntry = async (req, res) => {
   try {
-    const { date, symptoms, pulse, blood_pressure, blood_sugar, body_temperature, sleep_hours, stress_level } = req.body;
+    const { date, symptoms, pulse, blood_pressure, blood_sugar, body_temperature, sleep_hours, stress_level, mood_score } = req.body;
     
     const newEntry = await db.query(
       `INSERT INTO health_entries 
-      (user_id, date, symptoms, pulse, blood_pressure, blood_sugar, body_temperature, sleep_hours, stress_level) 
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`,
-      [req.user.userId, date || new Date(), symptoms, pulse, blood_pressure, blood_sugar, body_temperature, sleep_hours, stress_level]
+      (user_id, date, symptoms, pulse, blood_pressure, blood_sugar, body_temperature, sleep_hours, stress_level, mood_score) 
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *`,
+      [req.user.userId, date || new Date(), symptoms, pulse, blood_pressure, blood_sugar, body_temperature, sleep_hours, stress_level, mood_score]
     );
 
     res.status(201).json(newEntry.rows[0]);

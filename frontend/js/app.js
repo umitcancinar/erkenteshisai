@@ -419,6 +419,10 @@ const app = {
                             <label data-i18n="stress">Stres Seviyesi (1-10)</label>
                             <input type="number" min="1" max="10" id="h-stress" class="form-control" placeholder="5">
                         </div>
+                        <div class="form-group">
+                            <label>Mod / Ruh Hali (1-10)</label>
+                            <input type="number" min="1" max="10" id="h-mood" class="form-control" placeholder="7">
+                        </div>
                         <div class="form-group" style="grid-column: span 2;">
                             <label data-i18n="symptoms">Semptomlar / Notlar</label>
                             <input type="text" id="h-symptoms" class="form-control" placeholder="...">
@@ -438,8 +442,8 @@ const app = {
                                     <th>Tarih</th>
                                     <th>Nabız</th>
                                     <th>Tansiyon</th>
-                                    <th>Ateş</th>
-                                    <th>Uyku</th>
+                                    <th>Stres</th>
+                                    <th>Mod</th>
                                 </tr>
                             </thead>
                             <tbody id="data-history-list">
@@ -725,8 +729,8 @@ const app = {
                         <td>${new Date(e.date).toLocaleDateString('tr-TR')}</td>
                         <td>${e.pulse || '-'}</td>
                         <td>${e.blood_pressure || '-'}</td>
-                        <td>${e.body_temperature || '-'}</td>
-                        <td>${e.sleep_hours || '-'}</td>
+                        <td>${e.stress_level || '-'}</td>
+                        <td>${e.mood_score || '-'}</td>
                     </tr>
                 `).join('');
             } catch (error) { console.error(error); }
@@ -744,6 +748,7 @@ const app = {
                 body_temperature: document.getElementById('h-temp').value || null,
                 sleep_hours: document.getElementById('h-sleep').value || null,
                 stress_level: document.getElementById('h-stress').value || null,
+                mood_score: document.getElementById('h-mood').value || null,
                 symptoms: document.getElementById('h-symptoms').value || null,
             };
             try {
