@@ -255,18 +255,18 @@ const app = {
                     
                     <form id="login-form">
                         <div class="form-group">
-                            <label>E-posta</label>
+                            <label data-i18n="lbl_email">E-posta</label>
                             <input type="email" id="login-email" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Şifre</label>
+                            <label data-i18n="lbl_password">Şifre</label>
                             <input type="password" id="login-password" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Giriş Yap</button>
+                        <button type="submit" class="btn btn-primary" data-i18n="btn_login">Giriş Yap</button>
                     </form>
                     
                     <div class="toggle-auth">
-                        Hesabınız yok mu? <a href="#" id="show-register">Kayıt Ol</a>
+                        <span data-i18n="no_acc">Hesabınız yok mu?</span> <a href="#register" id="show-register" data-i18n="nav_register">Kayıt Ol</a>
                     </div>
                 </div>
             </div>
@@ -283,22 +283,22 @@ const app = {
                     
                     <form id="register-form">
                         <div class="form-group">
-                            <label>Kullanıcı Adı</label>
+                            <label data-i18n="lbl_username">Kullanıcı Adı</label>
                             <input type="text" id="reg-username" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>E-posta</label>
+                            <label data-i18n="lbl_email">E-posta</label>
                             <input type="email" id="reg-email" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label>Şifre</label>
+                            <label data-i18n="lbl_password">Şifre</label>
                             <input type="password" id="reg-password" class="form-control" required minlength="6">
                         </div>
-                        <button type="submit" class="btn btn-accent">Kayıt Ol</button>
+                        <button type="submit" class="btn btn-accent" data-i18n="btn_register">Kayıt Ol</button>
                     </form>
                     
                     <div class="toggle-auth">
-                        Zaten hesabınız var mı? <a href="#" id="show-login">Giriş Yap</a>
+                        <span data-i18n="already_acc">Zaten hesabınız var mı?</span> <a href="#login" id="show-login" data-i18n="nav_login">Giriş Yap</a>
                     </div>
                 </div>
             </div>

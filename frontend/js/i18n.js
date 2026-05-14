@@ -39,7 +39,14 @@ const i18n = {
             temp: "Ateş (°C)",
             sleep: "Uyku (Saat)",
             stress: "Stres Seviyesi (1-10)",
-            symptoms: "Semptomlar / Notlar"
+            symptoms: "Semptomlar / Notlar",
+            lbl_username: "Kullanıcı Adı",
+            lbl_email: "E-posta",
+            lbl_password: "Şifre",
+            btn_login: "Giriş Yap",
+            btn_register: "Kayıt Ol",
+            already_acc: "Zaten hesabınız var mı?",
+            no_acc: "Hesabınız yok mu?"
         },
         EN: {
             nav_home: "Home",
@@ -78,7 +85,14 @@ const i18n = {
             temp: "Fever (°C)",
             sleep: "Sleep (Hours)",
             stress: "Stress Level (1-10)",
-            symptoms: "Symptoms / Notes"
+            symptoms: "Symptoms / Notes",
+            lbl_username: "Username",
+            lbl_email: "E-mail",
+            lbl_password: "Password",
+            btn_login: "Login",
+            btn_register: "Register",
+            already_acc: "Already have an account?",
+            no_acc: "Don't have an account?"
         }
     },
     
