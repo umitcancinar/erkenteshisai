@@ -216,6 +216,11 @@ const app = {
                 await this.initProfileView();
                 i18n.apply();
                 break;
+            case '#face-id':
+                viewContainer.innerHTML = this.views.faceId();
+                this.initFaceIdView();
+                i18n.apply();
+                break;
             case '#admin':
                 if (this.user.role !== 'admin') { window.location.hash = '#dashboard'; return; }
                 viewContainer.innerHTML = this.views.admin();
@@ -504,6 +509,40 @@ const app = {
                     </div>
                 </div>
             </div>
+        `,
+
+        faceId: () => `
+            <div class="view-section page-header" style="text-align: center;">
+                <h1 data-i18n="nav_face_id">Face ID Entegrasyonu</h1>
+                <p>Sağlık verilerinize en güvenli erişim yolu.</p>
+            </div>
+            
+            <div class="view-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh;">
+                <div class="glass-panel" style="padding: 60px; text-align: center; max-width: 500px; border-radius: 30px; animation: pulse 2s infinite;">
+                    <div style="font-size: 80px; margin-bottom: 30px; color: var(--primary);">
+                        <i class='bx bx-face'></i>
+                    </div>
+                    <h2 style="margin-bottom: 16px;">Face ID ile Güvenli Giriş</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 32px; line-height: 1.6;">
+                        Gelecek güncellemelerde, biyometrik verilerinizle hesabınıza anında ve güvenli bir şekilde erişebileceksiniz.
+                    </p>
+                    <div style="background: rgba(0, 113, 227, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-weight: 600; display: inline-block;">
+                        <i class='bx bx-time'></i> Demo Aşamasındadır
+                    </div>
+                </div>
+                
+                <div style="margin-top: 40px; text-align: center; color: var(--text-muted); font-size: 14px;">
+                    <p>Biyometrik verileriniz uçtan uca şifrelenir ve <br> cihazınızın güvenli katmanında (Secure Enclave) saklanır.</p>
+                </div>
+            </div>
+            
+            <style>
+                @keyframes pulse {
+                    0% { transform: scale(1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+                    50% { transform: scale(1.02); box-shadow: 0 12px 48px 0 rgba(0, 113, 227, 0.2); }
+                    100% { transform: scale(1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+                }
+            </style>
         `,
 
         chat: () => `
@@ -1033,6 +1072,11 @@ const app = {
             const logs = await api.admin.getLogs();
             document.getElementById('admin-logs-list').innerHTML = logs.map(l => `<div style="padding: 8px; border-bottom: 1px solid var(--border);">${l.username}: ${l.type} - ${new Date(l.created_at).toLocaleTimeString()}</div>`).join('');
         } catch (error) { this.showToast('Hata', 'error'); } finally { this.hideLoader(); }
+    },
+
+    initFaceIdView() {
+        console.log('Face ID Demo View Initialized');
+        // Future biometric integration logic goes here
     }
 };
 
