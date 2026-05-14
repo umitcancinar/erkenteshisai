@@ -122,6 +122,7 @@ const app = {
         if (headerWelcome) headerWelcome.classList.add('hidden');
 
         document.getElementById('sidebar').classList.add('hidden');
+        document.body.classList.remove('sidebar-active');
         document.getElementById('main-content').style.marginLeft = '0';
         document.getElementById('main-content').style.width = '100%';
         document.getElementById('main-content').style.padding = '0';
@@ -145,11 +146,13 @@ const app = {
         // Handle layout for non-auth pages
         if (hash === '#landing' || hash === '#login' || hash === '#register') {
             document.getElementById('sidebar').classList.add('hidden');
+            document.body.classList.remove('sidebar-active');
             mainContent.style.marginLeft = '0';
             mainContent.style.width = '100%';
             mainContent.style.padding = '0';
         } else if (this.user) {
             document.getElementById('sidebar').classList.remove('hidden');
+            document.body.classList.add('sidebar-active');
             mainContent.style.marginLeft = 'var(--sidebar-width)';
             mainContent.style.width = 'calc(100% - var(--sidebar-width))';
             mainContent.style.padding = '84px 40px 40px';

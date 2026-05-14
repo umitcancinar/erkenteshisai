@@ -57,14 +57,10 @@ header {
     align-items: center;
     padding: 0 40px;
     border-bottom: 1px solid var(--border);
-    transition: padding-left 0.3s ease;
+    transition: padding-left 0.3s ease, background 0.3s ease;
 }
 
-#sidebar:not(.hidden) ~ #main-content header {
-    padding-left: calc(var(--sidebar-width) + 40px);
-}
-/* Since header is outside #main-content in index.html, I'll use a class or just check body class */
-body:has(#sidebar:not(.hidden)) header {
+body.sidebar-active header {
     padding-left: calc(var(--sidebar-width) + 40px);
 }
 
@@ -212,11 +208,12 @@ body:has(#sidebar:not(.hidden)) header {
 }
 
 .nav-footer {
-    padding: 24px;
+    padding: 16px 24px;
     border-top: 1px solid var(--border);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    background: rgba(0,0,0,0.2);
 }
 
 .user-info {
@@ -436,9 +433,10 @@ body:has(#sidebar:not(.hidden)) header {
 
 /* Chat Interface */
 .chat-container {
-    height: calc(100vh - 120px);
+    height: calc(100vh - 160px);
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
 /* Chat Messages (Apple Style) */
