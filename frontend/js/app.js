@@ -387,7 +387,7 @@ const app = {
                 <p>Günlük sağlık metriklerinizi buradan kaydedebilirsiniz.</p>
             </div>
             
-            <div class="view-section" style="max-width: 800px; margin: 0 auto;">
+            <div class="view-section" style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
                 <div class="glass-panel card">
                     <h2 style="margin-bottom: 20px;" data-i18n="btn_save">Yeni Veri Girişi</h2>
                     <form id="health-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
@@ -423,6 +423,26 @@ const app = {
                             <button type="submit" class="btn btn-primary" data-i18n="btn_save">Kaydet</button>
                         </div>
                     </form>
+                </div>
+
+                <div class="glass-panel card">
+                    <h2 style="margin-bottom: 20px;">Geçmiş Veriler</h2>
+                    <div style="overflow-x: auto;">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Tarih</th>
+                                    <th>Nabız</th>
+                                    <th>Tansiyon</th>
+                                    <th>Ateş</th>
+                                    <th>Uyku</th>
+                                </tr>
+                            </thead>
+                            <tbody id="data-history-list">
+                                <!-- Data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         `,
@@ -692,6 +712,24 @@ const app = {
     },
 
     async initDataEntryView() {
+        const loadHistory = async () => {
+            try {
+                const entries = await api.health.getEntries();
+                const list = document.getElementById('data-history-list');
+                list.innerHTML = entries.slice(0, 5).map(e => `
+                    <tr>
+                        <td>${new Date(e.date).toLocaleDateString('tr-TR')}</td>
+                        <td>${e.pulse || '-'}</td>
+                        <td>${e.blood_pressure || '-'}</td>
+                        <td>${e.body_temperature || '-'}</td>
+                        <td>${e.sleep_hours || '-'}</td>
+                    </tr>
+                `).join('');
+            } catch (error) { console.error(error); }
+        };
+
+        await loadHistory();
+
         const form = document.getElementById('health-form');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -709,6 +747,7 @@ const app = {
                 await api.health.addEntry(data);
                 this.showToast('Veriler kaydedildi');
                 form.reset();
+                await loadHistory();
                 window.location.hash = '#dashboard';
             } catch (error) {
                 this.showToast(error.message, 'error');
