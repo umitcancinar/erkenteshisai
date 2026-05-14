@@ -1,5 +1,5 @@
 const i18n = {
-    currentLang: localStorage.getItem('lang') || 'TR',
+    currentLang: localStorage.getItem('lang') || 'EN',
     
     translations: {
         TR: {
@@ -39,12 +39,11 @@ const i18n = {
             temp: "Ateş (°C)",
             sleep: "Uyku (Saat)",
             stress: "Stres Seviyesi (1-10)",
+            mood: "Mod / Ruh Hali (1-10)",
             symptoms: "Semptomlar / Notlar",
             lbl_username: "Kullanıcı Adı",
             lbl_email: "E-posta",
             lbl_password: "Şifre",
-            btn_login: "Giriş Yap",
-            btn_register: "Kayıt Ol",
             already_acc: "Zaten hesabınız var mı?",
             no_acc: "Hesabınız yok mu?",
             nav_dashboard: "Gösterge Paneli",
@@ -63,7 +62,32 @@ const i18n = {
             lbl_current_pass: "Mevcut Şifre",
             lbl_new_pass: "Yeni Şifre",
             btn_update: "Güncelle",
-            btn_change_pass: "Şifreyi Değiştir"
+            btn_change_pass: "Şifreyi Değiştir",
+            welcome_user: "Merhaba, ",
+            chart_title: "Nabız & Uyku Trendi",
+            history_data: "Geçmiş Veriler",
+            table_date: "Tarih",
+            table_pulse: "Nabız",
+            table_bp: "Tansiyon",
+            table_stress: "Stres",
+            table_mood: "Mod",
+            analysis_header: "Verileri Hazırla",
+            analysis_upload: "Fotoğrafı buraya sürükleyin veya seçmek için tıklayın",
+            analysis_symptoms_lbl: "Semptomlar / Şikayetiniz",
+            analysis_mood_lbl: "Mod Puanı (0 - 10)",
+            btn_analyze: "Analiz Et",
+            analysis_result_title: "Analiz Sonucu",
+            analysis_placeholder: "Verileri tamamladıktan sonra analiz sonucu burada görüntülenecektir.",
+            reports_desc: "Geçmiş analizleriniz ve haftalık raporlarınız.",
+            btn_doc_summary: "Doktora Özet",
+            btn_weekly_analysis: "Haftalık Analiz",
+            no_reports: "Henüz bir raporunuz bulunmuyor.",
+            face_header: "Akıllı Arka Plan Taraması",
+            face_desc: "Bu özelliği etkinleştirdiğinizde, cihaz kamerası bir yüz algıladığı her an arka planda otomatik olarak düşük güç tüketimli bir görüntü alır ve AI modelimize analiz ettirir.",
+            face_permission: "Otomatik Analiz İzni",
+            face_sub: "Her yüz algılandığında tara",
+            face_lock: "Verileriniz Secure Enclave ile korunur.",
+            analysis_data_placeholder: "Örn: Gözlerimde kızarıklık ve kaşıntı var..."
         },
         EN: {
             nav_home: "Home",
@@ -102,12 +126,11 @@ const i18n = {
             temp: "Fever (°C)",
             sleep: "Sleep (Hours)",
             stress: "Stress Level (1-10)",
+            mood: "Mood Score (1-10)",
             symptoms: "Symptoms / Notes",
             lbl_username: "Username",
             lbl_email: "E-mail",
             lbl_password: "Password",
-            btn_login: "Login",
-            btn_register: "Register",
             already_acc: "Already have an account?",
             no_acc: "Don't have an account?",
             nav_dashboard: "Dashboard",
@@ -126,7 +149,32 @@ const i18n = {
             lbl_current_pass: "Current Password",
             lbl_new_pass: "New Password",
             btn_update: "Update",
-            btn_change_pass: "Change Password"
+            btn_change_pass: "Change Password",
+            welcome_user: "Welcome, ",
+            chart_title: "Pulse & Sleep Trend",
+            history_data: "Historical Data",
+            table_date: "Date",
+            table_pulse: "Pulse",
+            table_bp: "B.P.",
+            table_stress: "Stress",
+            table_mood: "Mood",
+            analysis_header: "Prepare Data",
+            analysis_upload: "Drag and drop photo here or click to select",
+            analysis_symptoms_lbl: "Symptoms / Complaints",
+            analysis_mood_lbl: "Mood Score (0 - 10)",
+            btn_analyze: "Analyze Now",
+            analysis_result_title: "Analysis Result",
+            analysis_placeholder: "Analysis result will appear here after completing data entry.",
+            reports_desc: "Your past analyses and weekly reports.",
+            btn_doc_summary: "Doctor Summary",
+            btn_weekly_analysis: "Weekly Analysis",
+            no_reports: "No reports found yet.",
+            face_header: "Smart Background Scanning",
+            face_desc: "When enabled, the device camera automatically takes a low-power image whenever a face is detected in the background and sends it for AI analysis.",
+            face_permission: "Auto Analysis Permission",
+            face_sub: "Scan every time a face is detected",
+            face_lock: "Your data is protected by Secure Enclave.",
+            analysis_data_placeholder: "e.g. Redness and itching in my eyes..."
         }
     },
     
@@ -142,12 +190,15 @@ const i18n = {
         document.querySelectorAll('[data-i18n]').forEach(el => {
             const key = el.getAttribute('data-i18n');
             if (t[key]) {
-                if (el.tagName === 'INPUT' && el.type === 'placeholder') {
+                if (el.tagName === 'INPUT' && (el.type === 'placeholder' || el.hasAttribute('placeholder'))) {
+                    el.placeholder = t[key];
+                } else if (el.tagName === 'TEXTAREA') {
                     el.placeholder = t[key];
                 } else {
                     el.innerHTML = t[key];
                 }
             }
         });
+        document.getElementById('current-lang').textContent = this.currentLang;
     }
 };

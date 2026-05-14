@@ -84,7 +84,7 @@ const app = {
             if (headerLogin) headerLogin.classList.add('hidden');
             if (headerRegister) headerRegister.classList.add('hidden');
             if (headerWelcome) {
-                headerWelcome.textContent = `Merhaba, ${this.user.username}`;
+                headerWelcome.innerHTML = `<span data-i18n="welcome_user">Welcome, </span>${this.user.username}`;
                 headerWelcome.classList.remove('hidden');
             }
 
@@ -249,18 +249,18 @@ const app = {
                 <div class="features-grid container" style="max-width: 1200px; margin: 80px auto;">
                     <div class="glass-panel feature-card">
                         <i class='bx bx-scan'></i>
-                        <h3 data-i18n="feat_1_title">Multimodal Analiz</h3>
-                        <p data-i18n="feat_1_desc">Cilt, göz ve ağız fotoğraflarınızı Gemini AI ile analiz edin, olası riskleri saniyeler içinde öğrenin.</p>
+                        <h3 data-i18n="feat_1_title">Multimodal Analysis</h3>
+                        <p data-i18n="feat_1_desc">Analyze skin, eye and mouth photos with Gemini AI, learn potential risks in seconds.</p>
                     </div>
                     <div class="glass-panel feature-card">
                         <i class='bx bx-bot'></i>
-                        <h3 data-i18n="feat_2_title">AI Sağlık Asistanı</h3>
-                        <p data-i18n="feat_2_desc">7/24 aktif sağlık danışmanınızla semptomlarınız hakkında konuşun, bilinçli öneriler alın.</p>
+                        <h3 data-i18n="feat_2_title">AI Health Assistant</h3>
+                        <p data-i18n="feat_2_desc">Talk to your 24/7 active health consultant about your symptoms, get informed suggestions.</p>
                     </div>
                     <div class="glass-panel feature-card">
                         <i class='bx bx-line-chart'></i>
-                        <h3 data-i18n="feat_3_title">Trend Takibi</h3>
-                        <p data-i18n="feat_3_desc">Nabız, tansiyon ve şeker gibi kritik verilerinizi grafiklerle izleyin, sağlığınızdaki değişimi fark edin.</p>
+                        <h3 data-i18n="feat_3_title">Trend Tracking</h3>
+                        <p data-i18n="feat_3_desc">Monitor your critical data like pulse, blood pressure and sugar with charts, notice the change in your health.</p>
                     </div>
                 </div>
 
@@ -298,8 +298,8 @@ const app = {
                     <div class="logo" style="justify-content: center; margin-bottom: 20px;">
                         <i class='bx bx-pulse' style="font-size: 40px"></i>
                     </div>
-                    <h1 data-i18n="login_title">Erken Teşhis AI</h1>
-                    <p data-i18n="login_desc">Sağlık asistanınıza giriş yapın</p>
+                    <h1 data-i18n="login_title">Early Diagnosis AI</h1>
+                    <p data-i18n="login_desc">Log in to your health assistant</p>
                     
                     <form id="login-form">
                         <div class="form-group">
@@ -384,7 +384,7 @@ const app = {
                 </div>
                 
                 <div class="col-12 glass-panel card">
-                    <h2 style="margin-bottom: 20px;">Nabız & Uyku Trendi</h2>
+                    <h2 style="margin-bottom: 20px;" data-i18n="chart_title">Pulse & Sleep Trend</h2>
                     <canvas id="healthChart" height="80"></canvas>
                 </div>
             </div>
@@ -398,57 +398,57 @@ const app = {
             
             <div class="view-section" style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
                 <div class="glass-panel card">
-                    <h2 style="margin-bottom: 20px;" data-i18n="btn_save">Yeni Veri Girişi</h2>
+                    <h2 style="margin-bottom: 20px;" data-i18n="btn_save">Save</h2>
                     <form id="health-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-group">
-                            <label data-i18n="pulse">Nabız (bpm)</label>
+                            <label data-i18n="pulse">Pulse (bpm)</label>
                             <input type="number" id="h-pulse" class="form-control" placeholder="72">
                         </div>
                         <div class="form-group">
-                            <label data-i18n="bp">Tansiyon</label>
+                            <label data-i18n="bp">Blood Pressure</label>
                             <input type="text" id="h-bp" class="form-control" placeholder="120/80">
                         </div>
                         <div class="form-group">
-                            <label data-i18n="sugar">Kan Şekeri</label>
+                            <label data-i18n="sugar">Blood Sugar</label>
                             <input type="number" id="h-sugar" class="form-control" placeholder="95">
                         </div>
                         <div class="form-group">
-                            <label data-i18n="temp">Ateş (°C)</label>
+                            <label data-i18n="temp">Fever (°C)</label>
                             <input type="number" step="0.1" id="h-temp" class="form-control" placeholder="36.5">
                         </div>
                         <div class="form-group">
-                            <label data-i18n="sleep">Uyku (Saat)</label>
+                            <label data-i18n="sleep">Sleep (Hours)</label>
                             <input type="number" step="0.5" id="h-sleep" class="form-control" placeholder="7.5">
                         </div>
                         <div class="form-group">
-                            <label data-i18n="stress">Stres Seviyesi (1-10)</label>
+                            <label data-i18n="stress">Stress Level (1-10)</label>
                             <input type="number" min="1" max="10" id="h-stress" class="form-control" placeholder="5">
                         </div>
                         <div class="form-group">
-                            <label>Mod / Ruh Hali (1-10)</label>
+                            <label data-i18n="mood">Mood Score (1-10)</label>
                             <input type="number" min="1" max="10" id="h-mood" class="form-control" placeholder="7">
                         </div>
                         <div class="form-group" style="grid-column: span 2;">
-                            <label data-i18n="symptoms">Semptomlar / Notlar</label>
+                            <label data-i18n="symptoms">Symptoms / Notes</label>
                             <input type="text" id="h-symptoms" class="form-control" placeholder="...">
                         </div>
                         <div style="grid-column: span 2;">
-                            <button type="submit" class="btn btn-primary" data-i18n="btn_save">Kaydet</button>
+                            <button type="submit" class="btn btn-primary" data-i18n="btn_save">Save</button>
                         </div>
                     </form>
                 </div>
 
                 <div class="glass-panel card">
-                    <h2 style="margin-bottom: 20px;">Geçmiş Veriler</h2>
+                    <h2 style="margin-bottom: 20px;" data-i18n="history_data">Historical Data</h2>
                     <div style="overflow-x: auto;">
                         <table class="admin-table">
                             <thead>
                                 <tr>
-                                    <th>Tarih</th>
-                                    <th>Nabız</th>
-                                    <th>Tansiyon</th>
-                                    <th>Stres</th>
-                                    <th>Mod</th>
+                                    <th data-i18n="table_date">Date</th>
+                                    <th data-i18n="table_pulse">Pulse</th>
+                                    <th data-i18n="table_bp">B.P.</th>
+                                    <th data-i18n="table_stress">Stress</th>
+                                    <th data-i18n="table_mood">Mood</th>
                                 </tr>
                             </thead>
                             <tbody id="data-history-list">
@@ -513,8 +513,8 @@ const app = {
 
         faceId: () => `
             <div class="view-section page-header" style="text-align: center;">
-                <h1 data-i18n="nav_face_id">Yüz Tanıma Erişimi</h1>
-                <p>Arka planda otomatik sağlık taraması için izin verin.</p>
+                <h1 data-i18n="nav_face_id">Face Recognition Access</h1>
+                <p data-i18n="nav_face_id_desc">Allow background automatic health scanning.</p>
             </div>
             
             <div class="view-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh;">
@@ -522,15 +522,15 @@ const app = {
                     <div style="font-size: 70px; margin-bottom: 24px; color: var(--primary); animation: float 3s ease-in-out infinite;">
                         <i class='bx bx-face'></i>
                     </div>
-                    <h2 style="margin-bottom: 20px;">Akıllı Arka Plan Taraması</h2>
-                    <p style="color: var(--text-muted); margin-bottom: 40px; line-height: 1.7; font-size: 15px;">
-                        Bu özelliği etkinleştirdiğinizde, cihaz kamerası bir yüz algıladığı her an arka planda otomatik olarak düşük güç tüketimli bir görüntü alır ve AI modelimize analiz ettirir. Bu sayede manuel giriş yapmanıza gerek kalmadan sağlık trendleriniz takip edilir.
+                    <h2 style="margin-bottom: 20px;" data-i18n="face_header">Smart Background Scanning</h2>
+                    <p style="color: var(--text-muted); margin-bottom: 40px; line-height: 1.7; font-size: 15px;" data-i18n="face_desc">
+                        When enabled, the device camera automatically takes a low-power image whenever a face is detected in the background and sends it for AI analysis.
                     </p>
                     
                     <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 20px 30px; border-radius: 20px; width: 100%;">
                         <div style="text-align: left;">
-                            <div style="font-weight: 600; font-size: 16px;">Otomatik Analiz İzni</div>
-                            <div style="font-size: 13px; color: var(--text-muted);">Her yüz algılandığında tara</div>
+                            <div style="font-weight: 600; font-size: 16px;" data-i18n="face_permission">Auto Analysis Permission</div>
+                            <div style="font-size: 13px; color: var(--text-muted);" data-i18n="face_sub">Scan every time a face is detected</div>
                         </div>
                         <label class="apple-switch">
                             <input type="checkbox" id="face-recognition-toggle">
@@ -538,8 +538,8 @@ const app = {
                         </label>
                     </div>
                     
-                    <div style="margin-top: 30px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; justify-content: center;">
-                        <i class='bx bx-lock-alt'></i> Verileriniz Secure Enclave ile korunur.
+                    <div style="margin-top: 30px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; justify-content: center;" data-i18n="face_lock">
+                        <i class='bx bx-lock-alt'></i> Your data is protected by Secure Enclave.
                     </div>
                 </div>
             </div>
@@ -579,42 +579,42 @@ const app = {
 
         analysis: () => `
             <div class="view-section page-header">
-                <h1 data-i18n="nav_analysis">Manuel Analiz</h1>
-                <p>Fotoğraf yükleyerek, semptomlarınızı belirterek ve modunuzu puanlayarak detaylı teşhis alın.</p>
+                <h1 data-i18n="nav_analysis">Manual Analysis</h1>
+                <p data-i18n="analysis_desc">Get detailed diagnosis by uploading photos, stating your symptoms, and scoring your mood.</p>
             </div>
             
             <div class="dashboard-grid view-section">
                 <div class="col-6">
                     <div class="glass-panel card">
-                        <h2 style="margin-bottom: 20px;">Verileri Hazırla</h2>
+                        <h2 style="margin-bottom: 20px;" data-i18n="analysis_header">Prepare Data</h2>
                         <div class="upload-area" id="drop-zone" style="margin-bottom: 24px;">
                             <i class='bx bx-cloud-upload upload-icon'></i>
-                            <p>Fotoğrafı buraya sürükleyin veya seçmek için tıklayın</p>
+                            <p data-i18n="analysis_upload">Drag and drop photo here or click to select</p>
                             <input type="file" id="file-input" class="hidden" accept="image/*">
                         </div>
                         <img id="image-preview" style="max-width: 100%; margin-bottom: 24px; border-radius: 12px; display: none;">
                         
                         <div class="form-group">
-                            <label>Semptomlar / Şikayetiniz</label>
-                            <textarea id="analysis-symptoms" class="form-control" rows="3" placeholder="Örn: Gözlerimde kızarıklık ve kaşıntı var..."></textarea>
+                            <label data-i18n="analysis_symptoms_lbl">Symptoms / Complaints</label>
+                            <textarea id="analysis-symptoms" class="form-control" rows="3" data-i18n="analysis_data_placeholder" placeholder="e.g. Redness and itching in my eyes..."></textarea>
                         </div>
                         
                         <div class="form-group">
-                            <label>Mod Puanı (0 - 10)</label>
+                            <label data-i18n="analysis_mood_lbl">Mood Score (0 - 10)</label>
                             <div style="display: flex; align-items: center; gap: 15px;">
                                 <input type="range" id="analysis-mood" min="0" max="10" step="1" value="5" style="flex: 1;">
                                 <span id="mood-val" style="font-weight: 700; color: var(--primary); font-size: 18px;">5</span>
                             </div>
                         </div>
 
-                        <button id="analyze-btn" class="btn btn-primary" style="margin-top: 20px; width: 100%; display: none;">Analiz Et</button>
+                        <button id="analyze-btn" class="btn btn-primary" style="margin-top: 20px; width: 100%; display: none;" data-i18n="btn_analyze">Analyze Now</button>
                     </div>
                 </div>
                 <div class="col-6">
                     <div class="glass-panel card" style="height: 100%;">
-                        <h2 style="margin-bottom: 20px;">Analiz Sonucu</h2>
-                        <div id="analysis-result" style="line-height: 1.7; color: var(--text-muted);">
-                            Verileri tamamladıktan sonra analiz sonucu burada görüntülenecektir.
+                        <h2 style="margin-bottom: 20px;" data-i18n="analysis_result_title">Analysis Result</h2>
+                        <div id="analysis-result" style="line-height: 1.7; color: var(--text-muted);" data-i18n="analysis_placeholder">
+                            Analysis result will appear here after completing data entry.
                         </div>
                     </div>
                 </div>
@@ -624,12 +624,12 @@ const app = {
         reports: () => `
             <div class="view-section page-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1 data-i18n="nav_reports">Sağlık Raporları</h1>
-                    <p>Geçmiş analizleriniz ve haftalık raporlarınız.</p>
+                    <h1 data-i18n="nav_reports">Health Reports</h1>
+                    <p data-i18n="reports_desc">Your past analyses and weekly reports.</p>
                 </div>
                 <div style="display: flex; gap: 12px;">
-                    <button id="generate-summary-btn" class="btn btn-primary" style="width: auto;"><i class='bx bx-list-check'></i> Doktora Özet</button>
-                    <button id="generate-report-btn" class="btn btn-accent" style="width: auto;"><i class='bx bx-file-blank'></i> Haftalık Analiz</button>
+                    <button id="generate-summary-btn" class="btn btn-primary" style="width: auto;" data-i18n="btn_doc_summary"><i class='bx bx-list-check'></i> Doctor Summary</button>
+                    <button id="generate-report-btn" class="btn btn-accent" style="width: auto;" data-i18n="btn_weekly_analysis"><i class='bx bx-file-blank'></i> Weekly Analysis</button>
                 </div>
             </div>
             

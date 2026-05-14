@@ -20,8 +20,8 @@ exports.chat = async (req, res) => {
     // Add current message
     contents.push({ role: 'user', parts: [{ text: message }] });
 
-    // System instruction (can be passed in config)
-    const systemInstruction = "Sen Erken Teşhis AI adında bir sağlık danışmanısın. Kullanıcılara tıbbi konularda genel bilgiler verirsin, ancak her zaman kesin teşhis için bir doktora görünmeleri gerektiğini belirtirsin. Türkçe ve empatik bir dille yanıt ver.";
+    // System instruction
+    const systemInstruction = "You are Early Diagnosis AI, a professional health advisor. You provide general health information and analysis based on user symptoms and data. Always emphasize that your advice is a preliminary screening and not a professional medical diagnosis, and suggest seeing a doctor for official results. Be empathetic and professional.";
 
     const response = await ai.models.generateContent({
       model: MODEL_NAME,
@@ -58,10 +58,10 @@ exports.analyzeImage = async (req, res) => {
     const base64Image = req.file.buffer.toString('base64');
     const mimeType = req.file.mimetype;
     
-    let prompt = "Bir sağlık uzmanı gibi bu görüntüyü analiz et. Cilt, göz, ağız veya saçla ilgili belirgin bir sorun veya semptom var mı?";
-    if (symptoms) prompt += `\nKullanıcının belirttiği ek semptomlar: ${symptoms}`;
-    if (moodScore) prompt += `\nKullanıcının mod puanı (0-10): ${moodScore}`;
-    prompt += "\nDetaylı, ancak anlaşılır bir dille Türkçe olarak raporla. Unutma: Bu bir ön teşhistir, her zaman kesin karar için doktora görünmeyi tavsiye et.";
+    let prompt = "Analyze this image as a health expert. Is there any visible issue or symptom related to skin, eyes, mouth, or hair?";
+    if (symptoms) prompt += `\nAdditional symptoms stated by the user: ${symptoms}`;
+    if (moodScore) prompt += `\nUser's mood score (0-10): ${moodScore}`;
+    prompt += "\nReport in detailed but understandable English. Remember: This is a preliminary screening, always recommend seeing a doctor for a definitive decision.";
 
     const response = await ai.models.generateContent({
       model: MODEL_NAME,
@@ -103,7 +103,7 @@ exports.generateReport = async (req, res) => {
       `Tarih: ${e.date}, Nabız: ${e.pulse}, Tansiyon: ${e.blood_pressure}, Şeker: ${e.blood_sugar}, Ateş: ${e.body_temperature}, Uyku: ${e.sleep_hours} saat, Stres: ${e.stress_level}/10, Semptomlar: ${e.symptoms}`
     ).join('\n');
 
-    const prompt = `Kullanıcının son 7 günlük sağlık verileri aşağıdadır. Bu verileri analiz ederek detaylı bir "Haftalık Sağlık Raporu" ve "Doktor İçin Özet" oluştur. Türkçe olarak profesyonel bir dille yaz.\n\nVeriler:\n${dataString}`;
+    const prompt = `Below is the user's health data for the last 7 days. Analyze this data to create a detailed "Weekly Health Report" and a "Summary for Doctor". Write in professional English.\n\nData:\n${dataString}`;
 
     const response = await ai.models.generateContent({
       model: MODEL_NAME,
@@ -139,7 +139,7 @@ exports.generateDoctorSummary = async (req, res) => {
       `[${e.date}] Nabız: ${e.pulse}, Tansiyon: ${e.blood_pressure}, Şeker: ${e.blood_sugar}, Ateş: ${e.body_temperature}, Uyku: ${e.sleep_hours}sa, Stres: ${e.stress_level}, Semptomlar: ${e.symptoms}`
     ).join('\n');
 
-    const prompt = `Aşağıdaki verileri bir doktorun hızlıca inceleyebileceği profesyonel bir "Doktor Özet Raporu" formatına dönüştür. Kritik değişimleri vurgula, tıbbi terminolojiyi uygun kullan ama hasta için de anlaşılır olsun. Türkçe yaz.\n\nVeriler:\n${dataString}`;
+    const prompt = `Transform the following data into a professional "Doctor Summary Report" format that a doctor can quickly review. Highlight critical changes, use appropriate medical terminology but keep it understandable for the patient. Write in English.\n\nData:\n${dataString}`;
 
     const response = await ai.models.generateContent({
       model: MODEL_NAME,
