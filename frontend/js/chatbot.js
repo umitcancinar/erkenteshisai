@@ -16,6 +16,11 @@
                 </linearGradient>
             </defs>
             <path d="M40 8C58 8 73 18 76 36C79 54 68 72 52 78C42 81 30 80 20 74C10 68 4 54 6 36C8 20 22 8 40 8Z" fill="url(#cCharGrad)"/>
+            
+            <!-- Doctor Hat -->
+            <path d="M25 15 Q40 5 55 15 L55 22 Q40 12 25 22 Z" fill="white" stroke="#ddd" stroke-width="0.5"/>
+            <path d="M37 12 H43 M40 9 V15" stroke="#ff3b30" stroke-width="2" stroke-linecap="round"/>
+
             <g class="h-arm-l" style="transform-origin:10px 44px;"><path d="M8 42Q-2 34 0 26" stroke="#146d22" stroke-width="5" stroke-linecap="round" fill="none"/></g>
             <g class="h-arm-r" style="transform-origin:70px 44px;"><path d="M72 42Q82 34 80 26" stroke="#146d22" stroke-width="5" stroke-linecap="round" fill="none"/></g>
             <ellipse class="h-eye" cx="28" cy="36" rx="7" ry="9" fill="white"/>
@@ -119,7 +124,8 @@
         }
     }
 
-    toggle.addEventListener('click', () => {
+    toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
         const isOpen = windowEl.classList.toggle('open');
         if (isOpen && messages.children.length === 0) {
             addMsg('Merhaba! 👋 Ben Erken Teşhis AI asistanıyım. Sağlığınızla ilgili her şeyi sorabilirsiniz.', false);
@@ -127,8 +133,24 @@
         }
     });
 
-    closeBtn.addEventListener('click', () => windowEl.classList.remove('open'));
+    closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        windowEl.classList.remove('open');
+    });
+
+    // Close on outside click
+    document.addEventListener('click', (e) => {
+        if (windowEl.classList.contains('open') && !windowEl.contains(e.target) && !toggle.contains(e.target)) {
+            windowEl.classList.remove('open');
+        }
+    });
+
+    // Prevent clicks inside window from closing it
+    windowEl.addEventListener('click', (e) => e.stopPropagation());
+
     sendBtn.addEventListener('click', () => processMessage(input.value));
     input.addEventListener('keydown', (e) => { if (e.key === 'Enter') processMessage(input.value); });
+
+})();
 
 })();
