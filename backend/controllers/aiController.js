@@ -103,11 +103,19 @@ exports.generateDoctorSummary = async (req, res) => {
       'SELECT * FROM health_entries WHERE user_id = $1 ORDER BY date DESC LIMIT 10',
       [req.user.userId]
     );
-    
-    if (healthResult.rows.length === 0) return res.status(400).json({ error: 'Veri yok' });
 
-    const dataString = healthResult.rows.map(e => `[${e.date}] Pulse:${e.pulse}`).join('\n');
-    const prompt = `Doctor summary for:\n${dataString}\n\nLanguage: ${lang}`;
+    // Fetch recent analyses (image analysis, etc.) to include in the summary
+    const analysesResult = await db.query(
+      'SELECT type, content, created_at FROM analyses WHERE user_id = $1 AND type != \'doctor_summary\' ORDER BY created_at DESC LIMIT 5',
+      [req.user.userId]
+    );
+
+    const dataString = healthResult.rows.map(e => `[Data ${new Date(e.date).toLocaleDateString()}] Pulse:${e.pulse}, BP:${e.blood_pressure}, Symptoms:${e.symptoms}`).join('\n');
+    const analysesString = analysesResult.rows.map(a => `[AI ${a.type} @ ${new Date(a.created_at).toLocaleString()}] ${a.content.substring(0, 300)}...`).join('\n');
+
+    const prompt = lang === 'TR'
+        ? `Aşağıdaki sağlık verileri ve daha önceki Yapay Zeka analizlerini birleştirerek bir "Doktor Özet Raporu" oluştur. \n\nSAĞLIK VERİLERİ:\n${dataString}\n\nÖNCEKİ AI ANALİZLERİ:\n${analysesString}\n\nLütfen tüm bu verileri bütüncül bir şekilde değerlendir.`
+        : `Generate a comprehensive "Doctor Summary Report" by combining the following health data and previous AI analyses.\n\nHEALTH DATA:\n${dataString}\n\nPREVIOUS AI ANALYSES:\n${analysesString}\n\nPlease evaluate all this data holistically.`;
 
     const result = await ai.models.generateContent({
       model: MODEL_NAME,
@@ -119,6 +127,7 @@ exports.generateDoctorSummary = async (req, res) => {
       'INSERT INTO analyses (user_id, type, content) VALUES ($1, $2, $3) RETURNING *',
       [req.user.userId, 'doctor_summary', summaryContent]
     );
+
     res.json({ report: newReport.rows[0] });
   } catch (err) {
     console.error('Doctor Summary AI Error:', err);
