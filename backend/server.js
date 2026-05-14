@@ -20,6 +20,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Routes
 app.use('/api/auth', require('./routes/authRoutes'));
+app.use('/api/user', require('./routes/userRoutes'));
 app.use('/api/health', require('./routes/healthRoutes'));
 app.use('/api/ai', require('./routes/aiRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));

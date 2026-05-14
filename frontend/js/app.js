@@ -60,25 +60,44 @@ const app = {
 
     async checkAuth() {
         const token = localStorage.getItem('token');
+        const headerLogin = document.getElementById('header-login');
+        const headerRegister = document.getElementById('header-register');
+        const headerWelcome = document.getElementById('header-user-welcome');
+
         if (!token) {
-            window.location.hash = '#landing';
+            this.user = null;
+            if (headerLogin) headerLogin.classList.remove('hidden');
+            if (headerRegister) headerRegister.classList.remove('hidden');
+            if (headerWelcome) headerWelcome.classList.add('hidden');
+            document.getElementById('sidebar').classList.add('hidden');
+            if (window.location.hash !== '#landing' && window.location.hash !== '#login' && window.location.hash !== '#register') {
+                window.location.hash = '#landing';
+            }
             return;
         }
 
         try {
             this.showLoader();
             this.user = await api.auth.getMe();
+            
+            // Header Sync
+            if (headerLogin) headerLogin.classList.add('hidden');
+            if (headerRegister) headerRegister.classList.add('hidden');
+            if (headerWelcome) {
+                headerWelcome.textContent = `Merhaba, ${this.user.username}`;
+                headerWelcome.classList.remove('hidden');
+            }
+
             document.getElementById('nav-username').textContent = this.user.username;
             document.getElementById('sidebar').classList.remove('hidden');
             
-            // Show admin nav if user is admin
             if (this.user.role === 'admin') {
                 document.getElementById('admin-nav').classList.remove('hidden');
             } else {
                 document.getElementById('admin-nav').classList.add('hidden');
             }
             
-            if (window.location.hash === '' || window.location.hash === '#login') {
+            if (window.location.hash === '' || window.location.hash === '#login' || window.location.hash === '#register') {
                 window.location.hash = '#dashboard';
             } else {
                 this.router();
@@ -93,6 +112,15 @@ const app = {
     logout() {
         localStorage.removeItem('token');
         this.user = null;
+        
+        const headerLogin = document.getElementById('header-login');
+        const headerRegister = document.getElementById('header-register');
+        const headerWelcome = document.getElementById('header-user-welcome');
+        
+        if (headerLogin) headerLogin.classList.remove('hidden');
+        if (headerRegister) headerRegister.classList.remove('hidden');
+        if (headerWelcome) headerWelcome.classList.add('hidden');
+
         document.getElementById('sidebar').classList.add('hidden');
         document.getElementById('main-content').style.marginLeft = '0';
         document.getElementById('main-content').style.width = '100%';
@@ -135,9 +163,6 @@ const app = {
         this.updateNav(hash);
         viewContainer.innerHTML = ''; // Clear current view
         
-        // Hide header if not on landing/login/register (or keep it if you want)
-        // For Apple style, keeping it subtle is better.
-
         switch (hash) {
             case '#landing':
                 if (this.user) { window.location.hash = '#dashboard'; return; }
@@ -160,18 +185,32 @@ const app = {
             case '#dashboard':
                 viewContainer.innerHTML = this.views.dashboard();
                 await this.initDashboardView();
+                i18n.apply();
+                break;
+            case '#data-entry':
+                viewContainer.innerHTML = this.views.dataEntry();
+                this.initDataEntryView();
+                i18n.apply();
                 break;
             case '#chat':
                 viewContainer.innerHTML = this.views.chat();
                 this.initChatView();
+                i18n.apply();
                 break;
             case '#analysis':
                 viewContainer.innerHTML = this.views.analysis();
                 this.initAnalysisView();
+                i18n.apply();
                 break;
             case '#reports':
                 viewContainer.innerHTML = this.views.reports();
                 await this.initReportsView();
+                i18n.apply();
+                break;
+            case '#profile':
+                viewContainer.innerHTML = this.views.profile();
+                await this.initProfileView();
+                i18n.apply();
                 break;
             case '#admin':
                 if (this.user.role !== 'admin') { window.location.hash = '#dashboard'; return; }
@@ -311,7 +350,45 @@ const app = {
             </div>
             
             <div class="dashboard-grid view-section">
-                <div class="col-8 glass-panel card">
+                <div class="col-12" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 24px;">
+                    <div class="glass-panel card stat-card">
+                        <div class="stat-icon"><i class='bx bx-pulse'></i></div>
+                        <div class="stat-info">
+                            <h3 data-i18n="pulse">Nabız</h3>
+                            <p id="stat-pulse">--</p>
+                        </div>
+                    </div>
+                    <div class="glass-panel card stat-card">
+                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent);"><i class='bx bx-moon'></i></div>
+                        <div class="stat-info">
+                            <h3 data-i18n="sleep">Uyku</h3>
+                            <p id="stat-sleep">--</p>
+                        </div>
+                    </div>
+                    <div class="glass-panel card stat-card">
+                        <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;"><i class='bx bx-droplet'></i></div>
+                        <div class="stat-info">
+                            <h3 data-i18n="bp">Tansiyon</h3>
+                            <p id="stat-bp">--</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-12 glass-panel card">
+                    <h2 style="margin-bottom: 20px;">Nabız & Uyku Trendi</h2>
+                    <canvas id="healthChart" height="80"></canvas>
+                </div>
+            </div>
+        `,
+
+        dataEntry: () => `
+            <div class="view-section page-header">
+                <h1 data-i18n="nav_data">Veriler</h1>
+                <p>Günlük sağlık metriklerinizi buradan kaydedebilirsiniz.</p>
+            </div>
+            
+            <div class="view-section" style="max-width: 800px; margin: 0 auto;">
+                <div class="glass-panel card">
                     <h2 style="margin-bottom: 20px;" data-i18n="btn_save">Yeni Veri Girişi</h2>
                     <form id="health-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                         <div class="form-group">
@@ -347,34 +424,63 @@ const app = {
                         </div>
                     </form>
                 </div>
-                
-                <div class="col-4" style="display: flex; flex-direction: column; gap: 24px;">
-                    <div class="glass-panel card stat-card">
-                        <div class="stat-icon"><i class='bx bx-pulse'></i></div>
-                        <div class="stat-info">
-                            <h3>Son Nabız</h3>
-                            <p id="stat-pulse">--</p>
-                        </div>
-                    </div>
-                    <div class="glass-panel card stat-card">
-                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--accent);"><i class='bx bx-moon'></i></div>
-                        <div class="stat-info">
-                            <h3>Son Uyku</h3>
-                            <p id="stat-sleep">--</p>
-                        </div>
+            </div>
+        `,
+
+        profile: () => `
+            <div class="view-section page-header">
+                <h1 data-i18n="profile_title">Kullanıcı Bilgileri</h1>
+                <p data-i18n="profile_desc">Kişisel bilgilerinizi ve şifrenizi buradan güncelleyebilirsiniz.</p>
+            </div>
+            
+            <div class="dashboard-grid view-section">
+                <div class="col-6">
+                    <div class="glass-panel card">
+                        <h2 style="margin-bottom: 20px;" data-i18n="nav_profile">Profil Bilgileri</h2>
+                        <form id="profile-form">
+                            <div class="form-group">
+                                <label data-i18n="lbl_height">Boy (cm)</label>
+                                <input type="number" id="p-height" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="lbl_weight">Kilo (kg)</label>
+                                <input type="number" id="p-weight" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="lbl_gender">Cinsiyet</label>
+                                <select id="p-gender" class="form-control">
+                                    <option value="Erkek">Erkek</option>
+                                    <option value="Kadın">Kadın</option>
+                                    <option value="Diğer">Diğer</option>
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" data-i18n="btn_update">Güncelle</button>
+                        </form>
                     </div>
                 </div>
                 
-                <div class="col-12 glass-panel card">
-                    <h2 style="margin-bottom: 20px;">Nabız & Uyku Trendi</h2>
-                    <canvas id="healthChart" height="80"></canvas>
+                <div class="col-6">
+                    <div class="glass-panel card">
+                        <h2 style="margin-bottom: 20px;" data-i18n="lbl_password">Şifre Değiştir</h2>
+                        <form id="password-form">
+                            <div class="form-group">
+                                <label data-i18n="lbl_current_pass">Mevcut Şifre</label>
+                                <input type="password" id="p-current-pass" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label data-i18n="lbl_new_pass">Yeni Şifre</label>
+                                <input type="password" id="p-new-pass" class="form-control" required minlength="6">
+                            </div>
+                            <button type="submit" class="btn btn-accent" data-i18n="btn_change_pass">Şifreyi Değiştir</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         `,
 
         chat: () => `
             <div class="view-section page-header">
-                <h1>Sağlık Danışmanı</h1>
+                <h1 data-i18n="nav_chat">Sağlık Danışmanı</h1>
                 <p>Yapay zeka asistanımızla sağlık durumunuz hakkında konuşun.</p>
             </div>
             
@@ -393,7 +499,7 @@ const app = {
 
         analysis: () => `
             <div class="view-section page-header">
-                <h1>Görsel Analiz</h1>
+                <h1 data-i18n="nav_analysis">Görsel Analiz</h1>
                 <p>Cilt, göz, ağız veya saçınızla ilgili bir fotoğraf yükleyerek ön teşhis alın.</p>
             </div>
             
@@ -424,17 +530,18 @@ const app = {
         reports: () => `
             <div class="view-section page-header" style="display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                    <h1>Sağlık Raporları</h1>
+                    <h1 data-i18n="nav_reports">Sağlık Raporları</h1>
                     <p>Geçmiş analizleriniz ve haftalık raporlarınız.</p>
                 </div>
-                <button id="generate-report-btn" class="btn btn-accent" style="width: auto;"><i class='bx bx-file-blank'></i> Yeni Rapor Oluştur</button>
+                <div style="display: flex; gap: 12px;">
+                    <button id="generate-summary-btn" class="btn btn-primary" style="width: auto;"><i class='bx bx-list-check'></i> Doktora Özet</button>
+                    <button id="generate-report-btn" class="btn btn-accent" style="width: auto;"><i class='bx bx-file-blank'></i> Haftalık Analiz</button>
+                </div>
             </div>
             
             <div class="view-section">
-                <div class="glass-panel card">
-                    <div id="reports-list" style="display: flex; flex-direction: column; gap: 16px;">
-                        <!-- Reports will be listed here -->
-                    </div>
+                <div id="reports-list" style="display: flex; flex-direction: column; gap: 16px;">
+                    <!-- Reports will be listed here -->
                 </div>
             </div>
         `,
@@ -581,11 +688,13 @@ const app = {
     },
 
     async initDashboardView() {
-        // Handle form submission
+        await this.loadDashboardData();
+    },
+
+    async initDataEntryView() {
         const form = document.getElementById('health-form');
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
-            
             const data = {
                 pulse: document.getElementById('h-pulse').value || null,
                 blood_pressure: document.getElementById('h-bp').value || null,
@@ -595,21 +704,69 @@ const app = {
                 stress_level: document.getElementById('h-stress').value || null,
                 symptoms: document.getElementById('h-symptoms').value || null,
             };
-
             try {
                 this.showLoader();
                 await api.health.addEntry(data);
                 this.showToast('Veriler kaydedildi');
                 form.reset();
-                this.loadDashboardData();
+                window.location.hash = '#dashboard';
             } catch (error) {
                 this.showToast(error.message, 'error');
             } finally {
                 this.hideLoader();
             }
         });
+    },
 
-        await this.loadDashboardData();
+    async initProfileView() {
+        try {
+            this.showLoader();
+            const profile = await api.user.getProfile();
+            document.getElementById('p-height').value = profile.height || '';
+            document.getElementById('p-weight').value = profile.weight || '';
+            document.getElementById('p-gender').value = profile.gender || 'Erkek';
+            
+            const pForm = document.getElementById('profile-form');
+            pForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const data = {
+                    height: document.getElementById('p-height').value,
+                    weight: document.getElementById('p-weight').value,
+                    gender: document.getElementById('p-gender').value
+                };
+                try {
+                    this.showLoader();
+                    await api.user.updateProfile(data);
+                    this.showToast('Profil güncellendi');
+                } catch (error) {
+                    this.showToast(error.message, 'error');
+                } finally {
+                    this.hideLoader();
+                }
+            });
+
+            const passForm = document.getElementById('password-form');
+            passForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const currentPassword = document.getElementById('p-current-pass').value;
+                const newPassword = document.getElementById('p-new-pass').value;
+                try {
+                    this.showLoader();
+                    await api.user.changePassword({ currentPassword, newPassword });
+                    this.showToast('Şifre değiştirildi');
+                    passForm.reset();
+                } catch (error) {
+                    this.showToast(error.message, 'error');
+                } finally {
+                    this.hideLoader();
+                }
+            });
+
+        } catch (error) {
+            this.showToast('Profil yüklenemedi', 'error');
+        } finally {
+            this.hideLoader();
+        }
     },
 
     async loadDashboardData() {
@@ -619,6 +776,7 @@ const app = {
                 // Update stats
                 document.getElementById('stat-pulse').textContent = entries[0].pulse ? entries[0].pulse + ' bpm' : '--';
                 document.getElementById('stat-sleep').textContent = entries[0].sleep_hours ? entries[0].sleep_hours + ' sa' : '--';
+                document.getElementById('stat-bp').textContent = entries[0].blood_pressure || '--';
                 
                 // Update chart
                 const labels = entries.slice(0, 7).map(e => {
@@ -686,7 +844,6 @@ const app = {
         const sendBtn = document.getElementById('chat-send');
         const msgsContainer = document.getElementById('chat-messages');
 
-        // Render existing history in UI if needed (just visual persistence during session)
         if (this.chatHistory.length > 0) {
             msgsContainer.innerHTML = '';
             this.chatHistory.forEach(msg => {
@@ -702,7 +859,6 @@ const app = {
             const text = input.value.trim();
             if (!text) return;
 
-            // Add user message to UI
             const userDiv = document.createElement('div');
             userDiv.className = 'message msg-user';
             userDiv.textContent = text;
@@ -711,7 +867,6 @@ const app = {
             input.value = '';
 
             try {
-                // Remove loader logic for chat to make it feel natural, add a typing indicator
                 const typingDiv = document.createElement('div');
                 typingDiv.className = 'message msg-ai';
                 typingDiv.id = 'typing-indicator';
@@ -723,17 +878,14 @@ const app = {
                 
                 document.getElementById('typing-indicator').remove();
 
-                // Add AI message to UI
                 const aiDiv = document.createElement('div');
                 aiDiv.className = 'message msg-ai';
-                // Convert markdown-like response roughly
-                aiDiv.innerHTML = res.reply.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                aiDiv.innerHTML = res.response.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 msgsContainer.appendChild(aiDiv);
                 msgsContainer.scrollTop = msgsContainer.scrollHeight;
 
-                // Update history
                 this.chatHistory.push({ role: 'user', text });
-                this.chatHistory.push({ role: 'model', text: res.reply });
+                this.chatHistory.push({ role: 'model', text: res.response });
             } catch (error) {
                 document.getElementById('typing-indicator')?.remove();
                 this.showToast('Yanıt alınamadı', 'error');
@@ -755,61 +907,36 @@ const app = {
         let selectedFile = null;
 
         dropZone.addEventListener('click', () => fileInput.click());
-        
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        });
-        
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('dragover'); });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-        
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('dragover');
-            if (e.dataTransfer.files.length) {
-                handleFile(e.dataTransfer.files[0]);
-            }
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
         });
-
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                handleFile(e.target.files[0]);
-            }
-        });
+        fileInput.addEventListener('change', (e) => { if (e.target.files.length) handleFile(e.target.files[0]); });
 
         const handleFile = (file) => {
-            if (!file.type.startsWith('image/')) {
-                this.showToast('Lütfen geçerli bir resim dosyası seçin', 'error');
-                return;
-            }
+            if (!file.type.startsWith('image/')) { this.showToast('Geçerli bir resim seçin', 'error'); return; }
             selectedFile = file;
             const reader = new FileReader();
-            reader.onload = (e) => {
-                preview.src = e.target.result;
-                preview.style.display = 'block';
-                analyzeBtn.style.display = 'block';
-            };
+            reader.onload = (e) => { preview.src = e.target.result; preview.style.display = 'block'; analyzeBtn.style.display = 'block'; };
             reader.readAsDataURL(file);
         };
 
         analyzeBtn.addEventListener('click', async () => {
             if (!selectedFile) return;
-            
             const formData = new FormData();
             formData.append('image', selectedFile);
-
             try {
                 this.showLoader();
-                resultDiv.innerHTML = '<div class="spinner"></div> Analiz ediliyor... Lütfen bekleyin.';
+                resultDiv.innerHTML = '<div class="spinner"></div> Analiz ediliyor...';
                 const res = await api.ai.analyzeImage(formData);
                 resultDiv.innerHTML = res.analysis.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
                 this.showToast('Analiz tamamlandı');
             } catch (error) {
                 resultDiv.innerHTML = 'Hata: ' + error.message;
-                this.showToast('Analiz hatası', 'error');
-            } finally {
-                this.hideLoader();
-            }
+            } finally { this.hideLoader(); }
         });
     },
 
@@ -819,84 +946,45 @@ const app = {
                 this.showLoader();
                 const reports = await api.ai.getReports();
                 const list = document.getElementById('reports-list');
-                
-                if (reports.length === 0) {
-                    list.innerHTML = '<p style="color: var(--text-muted)">Henüz bir raporunuz bulunmuyor.</p>';
-                    return;
-                }
-
+                if (reports.length === 0) { list.innerHTML = '<p style="color: var(--text-muted)">Henüz bir raporunuz bulunmuyor.</p>'; return; }
                 list.innerHTML = reports.map(r => `
-                    <div style="background: rgba(0,0,0,0.2); padding: 16px; border-radius: 8px; border: 1px solid var(--border);">
+                    <div class="glass-panel card" style="background: rgba(0,0,0,0.2); margin-bottom: 16px;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--text-muted);">
                             <span><i class='bx bx-time'></i> ${new Date(r.created_at).toLocaleString('tr-TR')}</span>
-                            <span style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${r.type === 'report' ? 'Haftalık Rapor' : 'Görsel Analiz'}</span>
+                            <span style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${r.type.toUpperCase()}</span>
                         </div>
-                        <div style="line-height: 1.6;">
-                            ${r.content.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
-                        </div>
+                        <div style="line-height: 1.6;">${r.content.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>
                     </div>
                 `).join('');
-            } catch (error) {
-                this.showToast('Raporlar yüklenemedi', 'error');
-            } finally {
-                this.hideLoader();
-            }
+            } catch (error) { this.showToast('Raporlar yüklenemedi', 'error'); } finally { this.hideLoader(); }
         };
-
         await loadReports();
-
         document.getElementById('generate-report-btn').addEventListener('click', async () => {
+            try { this.showLoader(); await api.ai.generateReport(); this.showToast('Yeni rapor oluşturuldu'); await loadReports(); }
+            catch (error) { this.showToast(error.message, 'error'); } finally { this.hideLoader(); }
+        });
+        document.getElementById('generate-summary-btn').addEventListener('click', async () => {
             try {
                 this.showLoader();
-                await api.ai.generateReport();
-                this.showToast('Yeni rapor oluşturuldu');
-                await loadReports();
-            } catch (error) {
-                this.showToast(error.message, 'error');
-            } finally {
-                this.hideLoader();
-            }
+                const res = await api.ai.chat("Lütfen şimdiye kadarki verilerime dayanarak bir 'Doktora Özet Raporu' hazırla. Kronolojik olarak önemli bulguları ve dikkat edilmesi gerekenleri maddeler halinde yaz.", this.chatHistory);
+                this.showToast('Doktor özeti oluşturuldu');
+                await loadReports(); // Summary might be saved if we update backend to save it
+            } catch (error) { this.showToast(error.message, 'error'); } finally { this.hideLoader(); }
         });
     },
 
     async initAdminView() {
         try {
             this.showLoader();
-            
-            // Fetch stats
             const stats = await api.admin.getStats();
             document.getElementById('admin-stat-users').textContent = stats.users;
             document.getElementById('admin-stat-entries').textContent = stats.entries;
             document.getElementById('admin-stat-analyses').textContent = stats.analyses;
-
-            // Fetch users
             const users = await api.admin.getUsers();
-            const usersList = document.getElementById('admin-users-list');
-            usersList.innerHTML = users.map(u => `
-                <tr>
-                    <td>${u.id}</td>
-                    <td>${u.username}</td>
-                    <td>${u.email}</td>
-                    <td><span style="background: rgba(255,255,255,0.1); padding: 2px 8px; border-radius: 4px; font-size: 12px;">${u.role}</span></td>
-                    <td>${new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
-                </tr>
-            `).join('');
-
-            // Fetch logs
+            document.getElementById('admin-users-list').innerHTML = users.map(u => `<tr><td>${u.id}</td><td>${u.username}</td><td>${u.email}</td><td>${u.role}</td><td>${new Date(u.created_at).toLocaleDateString()}</td></tr>`).join('');
             const logs = await api.admin.getLogs();
-            const logsList = document.getElementById('admin-logs-list');
-            logsList.innerHTML = logs.map(l => `
-                <div style="font-size: 14px; padding: 8px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between;">
-                    <span><strong>${l.username}</strong>: ${l.type} işlemi gerçekleştirdi.</span>
-                    <span style="color: var(--text-muted);">${new Date(l.created_at).toLocaleTimeString('tr-TR')}</span>
-                </div>
-            `).join('');
-
-        } catch (error) {
-            this.showToast('Yönetici verileri yüklenemedi', 'error');
-        } finally {
-            this.hideLoader();
-        }
+            document.getElementById('admin-logs-list').innerHTML = logs.map(l => `<div style="padding: 8px; border-bottom: 1px solid var(--border);">${l.username}: ${l.type} - ${new Date(l.created_at).toLocaleTimeString()}</div>`).join('');
+        } catch (error) { this.showToast('Hata', 'error'); } finally { this.hideLoader(); }
     }
 };
 

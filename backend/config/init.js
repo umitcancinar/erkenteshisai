@@ -9,6 +9,9 @@ const initDB = async () => {
         email VARCHAR(100) UNIQUE NOT NULL,
         password_hash VARCHAR(255) NOT NULL,
         role VARCHAR(20) DEFAULT 'user',
+        height INTEGER,
+        weight INTEGER,
+        gender VARCHAR(10),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `;

@@ -50,6 +50,12 @@ const api = {
         getEntries: () => api.request('/health')
     },
 
+    user: {
+        getProfile: () => api.request('/user/profile'),
+        updateProfile: (data) => api.request('/user/profile', { method: 'PUT', body: JSON.stringify(data) }),
+        changePassword: (data) => api.request('/user/change-password', { method: 'PUT', body: JSON.stringify(data) })
+    },
+
     ai: {
         chat: (message, history) => api.request('/ai/chat', { method: 'POST', body: JSON.stringify({ message, history }) }),
         analyzeImage: (formData) => api.request('/ai/analyze-image', { method: 'POST', body: formData }),

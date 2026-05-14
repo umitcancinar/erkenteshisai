@@ -29,6 +29,7 @@
                 <button id="theme-toggle" class="toggle-btn" title="Tema Değiştir/Toggle Theme">
                     <i class='bx bx-moon' id="theme-icon"></i>
                 </button>
+                <span id="header-user-welcome" class="hidden" style="margin-right: 15px; font-weight: 500; font-size: 14px;"></span>
                 <a href="#login" class="nav-link" data-i18n="nav_login" id="header-login">Giriş Yap</a>
                 <a href="#register" class="nav-link" data-i18n="nav_register" id="header-register" style="font-weight: 600;">Kayıt Ol</a>
             </div>
@@ -42,11 +43,13 @@
                 <h2>ErkenTeşhis<span>AI</span></h2>
             </div>
             <ul class="nav-links">
-                <li><a href="#dashboard" class="active" data-link><i class='bx bx-home-alt'></i> Gösterge Paneli</a></li>
-                <li><a href="#chat" data-link><i class='bx bx-message-square-dots'></i> Sağlık Danışmanı</a></li>
-                <li><a href="#analysis" data-link><i class='bx bx-scan'></i> Görsel Analiz</a></li>
-                <li><a href="#reports" data-link><i class='bx bx-file-blank'></i> Raporlar</a></li>
-                <li id="admin-nav" class="hidden"><a href="#admin" data-link><i class='bx bx-shield-quarter'></i> Yönetim Paneli</a></li>
+                <li><a href="#dashboard" class="active" data-link data-i18n="nav_dashboard"><i class='bx bx-home-alt'></i> Gösterge Paneli</a></li>
+                <li><a href="#data-entry" data-link data-i18n="nav_data"><i class='bx bx-data'></i> Veriler</a></li>
+                <li><a href="#chat" data-link data-i18n="nav_chat"><i class='bx bx-message-square-dots'></i> Sağlık Danışmanı</a></li>
+                <li><a href="#analysis" data-link data-i18n="nav_analysis"><i class='bx bx-scan'></i> Görsel Analiz</a></li>
+                <li><a href="#reports" data-link data-i18n="nav_reports"><i class='bx bx-file-blank'></i> Raporlar</a></li>
+                <li><a href="#profile" data-link data-i18n="nav_profile"><i class='bx bx-user-circle'></i> Kullanıcı Bilgileri</a></li>
+                <li id="admin-nav" class="hidden"><a href="#admin" data-link data-i18n="nav_admin"><i class='bx bx-shield-quarter'></i> Yönetim Paneli</a></li>
             </ul>
             <div class="nav-footer">
                 <div class="user-info">
