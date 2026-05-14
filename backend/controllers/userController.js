@@ -4,8 +4,12 @@ const bcrypt = require('bcrypt');
 exports.getProfile = async (req, res) => {
     try {
         const result = await db.query('SELECT id, username, email, height, weight, gender FROM users WHERE id = $1', [req.user.userId]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Kullanıcı bulunamadı.' });
+        }
         res.json(result.rows[0]);
     } catch (err) {
+        console.error('getProfile Error:', err);
         res.status(500).json({ error: 'Profil bilgileri alınamadı.' });
     }
 };

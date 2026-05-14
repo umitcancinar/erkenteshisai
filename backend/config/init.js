@@ -46,6 +46,11 @@ const initDB = async () => {
     await db.query(createHealthEntriesTable);
     await db.query(createAnalysesTable);
 
+    // Ensure new columns exist in users table
+    await db.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS height INTEGER');
+    await db.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS weight INTEGER');
+    await db.query('ALTER TABLE users ADD COLUMN IF NOT EXISTS gender VARCHAR(10)');
+
     console.log('Database tables initialized successfully.');
   } catch (err) {
     console.error('Error initializing database tables:', err);
