@@ -114,7 +114,7 @@ const app = {
         const hash = window.location.hash || '#landing';
         
         // Handle layout for non-auth pages
-        if (hash === '#landing' || hash === '#login') {
+        if (hash === '#landing' || hash === '#login' || hash === '#register') {
             document.getElementById('sidebar').classList.add('hidden');
             mainContent.style.marginLeft = '0';
             mainContent.style.width = '100%';
@@ -127,7 +127,7 @@ const app = {
         }
 
         // Redirect to landing if not authenticated
-        if (hash !== '#landing' && hash !== '#login' && !this.user) {
+        if (hash !== '#landing' && hash !== '#login' && hash !== '#register' && !this.user) {
             window.location.hash = '#landing';
             return;
         }
