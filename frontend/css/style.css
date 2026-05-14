@@ -131,6 +131,25 @@ body.sidebar-active header {
     display: none !important;
 }
 
+.mobile-toggle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--text-main);
+    transition: var(--transition);
+}
+
+.mobile-toggle:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
 /* Sidebar */
 #sidebar {
     width: var(--sidebar-width);
@@ -856,15 +875,7 @@ h1, h2, h3 {
 
     /* Mobile Menu Toggle Button */
     .mobile-toggle {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        background: rgba(255,255,255,0.05);
-        border-radius: 10px;
-        font-size: 24px;
-        cursor: pointer;
+        display: flex;
     }
 
     .view-section.page-header {

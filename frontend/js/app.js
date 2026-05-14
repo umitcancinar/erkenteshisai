@@ -169,15 +169,20 @@ const app = {
         const mainContent = document.getElementById('main-content');
         const hash = window.location.hash || '#landing';
         
+        const sidebar = document.getElementById('sidebar');
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+
         // Handle layout for non-auth pages
         if (hash === '#landing' || hash === '#login' || hash === '#register') {
-            document.getElementById('sidebar').classList.add('hidden');
+            sidebar.classList.add('hidden');
+            if (mobileToggle) mobileToggle.style.display = 'none';
             document.body.classList.remove('sidebar-active');
             mainContent.style.marginLeft = '0';
             mainContent.style.width = '100%';
             mainContent.style.padding = '0';
         } else if (this.user) {
-            document.getElementById('sidebar').classList.remove('hidden');
+            sidebar.classList.remove('hidden');
+            if (mobileToggle && window.innerWidth <= 768) mobileToggle.style.display = 'flex';
             document.body.classList.add('sidebar-active');
             mainContent.style.marginLeft = 'var(--sidebar-width)';
             mainContent.style.width = 'calc(100% - var(--sidebar-width))';
