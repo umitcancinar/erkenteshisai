@@ -3,10 +3,9 @@ const db = require('../config/db');
 
 // Initialize Gemini
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-const MODEL_NAME = 'gemini-3.0-flash-preview';
+const MODEL_NAME = 'gemini-1.5-flash';
 
 exports.chat = async (req, res) => {
-  console.log('AI Controller Chat Reached, Body:', req.body);
   try {
     const { message, history } = req.body;
     
