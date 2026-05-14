@@ -124,6 +124,7 @@ const app = {
         document.getElementById('sidebar').classList.add('hidden');
         document.getElementById('main-content').style.marginLeft = '0';
         document.getElementById('main-content').style.width = '100%';
+        document.getElementById('main-content').style.padding = '0';
         window.location.hash = '#landing';
     },
 
@@ -149,9 +150,9 @@ const app = {
             mainContent.style.padding = '0';
         } else if (this.user) {
             document.getElementById('sidebar').classList.remove('hidden');
-            mainContent.style.marginLeft = 'calc(var(--sidebar-width) + 32px)';
-            mainContent.style.width = 'calc(100% - var(--sidebar-width) - 32px)';
-            mainContent.style.padding = '32px 32px 32px 0';
+            mainContent.style.marginLeft = 'var(--sidebar-width)';
+            mainContent.style.width = 'calc(100% - var(--sidebar-width))';
+            mainContent.style.padding = '84px 40px 40px';
         }
 
         // Redirect to landing if not authenticated
