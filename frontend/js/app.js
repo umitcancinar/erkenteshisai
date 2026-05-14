@@ -513,34 +513,56 @@ const app = {
 
         faceId: () => `
             <div class="view-section page-header" style="text-align: center;">
-                <h1 data-i18n="nav_face_id">Face ID Entegrasyonu</h1>
-                <p>Sağlık verilerinize en güvenli erişim yolu.</p>
+                <h1 data-i18n="nav_face_id">Otomatik Yüz Analizi</h1>
+                <p>Cihaz kamerası ile temassız, anlık sağlık taraması.</p>
             </div>
             
             <div class="view-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh;">
-                <div class="glass-panel" style="padding: 60px; text-align: center; max-width: 500px; border-radius: 30px; animation: pulse 2s infinite;">
-                    <div style="font-size: 80px; margin-bottom: 30px; color: var(--primary);">
-                        <i class='bx bx-face'></i>
+                <div class="glass-panel" style="padding: 40px; text-align: center; max-width: 600px; border-radius: 30px; border: 2px solid var(--primary); position: relative; overflow: hidden;">
+                    <div id="camera-simulation" style="width: 100%; height: 300px; background: #000; border-radius: 20px; margin-bottom: 24px; display: flex; align-items: center; justify-content: center; position: relative;">
+                        <i class='bx bx-camera' style="font-size: 60px; color: rgba(255,255,255,0.2);"></i>
+                        <div class="scan-line"></div>
+                        <div style="position: absolute; top: 20px; left: 20px; color: #ff453a; font-size: 12px; font-weight: bold; display: flex; align-items: center; gap: 6px;">
+                            <span style="width: 8px; height: 8px; background: #ff453a; border-radius: 50%; animation: blink 1s infinite;"></span> REC
+                        </div>
                     </div>
-                    <h2 style="margin-bottom: 16px;">Face ID ile Güvenli Giriş</h2>
+                    
+                    <h2 style="margin-bottom: 16px;">Otomatik Görüntü Yakalama</h2>
                     <p style="color: var(--text-muted); margin-bottom: 32px; line-height: 1.6;">
-                        Gelecek güncellemelerde, biyometrik verilerinizle hesabınıza anında ve güvenli bir şekilde erişebileceksiniz.
+                        Sistem yüzünüzü otomatik olarak algılar ve cilt tonu, göz akı rengi gibi metrikleri analiz etmek için yüksek çözünürlüklü kareler yakalar.
                     </p>
-                    <div style="background: rgba(0, 113, 227, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-weight: 600; display: inline-block;">
-                        <i class='bx bx-time'></i> Demo Aşamasındadır
+                    
+                    <button class="btn btn-primary" id="start-camera-demo" style="width: auto; padding: 12px 32px;">
+                        <i class='bx bx-play-circle'></i> Kamerayı Başlat (Demo)
+                    </button>
+                    
+                    <div style="margin-top: 20px;">
+                        <span style="background: rgba(40, 205, 65, 0.1); color: var(--accent); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600;">
+                            <i class='bx bx-check-shield'></i> Gizlilik Odaklı Analiz
+                        </span>
                     </div>
-                </div>
-                
-                <div style="margin-top: 40px; text-align: center; color: var(--text-muted); font-size: 14px;">
-                    <p>Biyometrik verileriniz uçtan uca şifrelenir ve <br> cihazınızın güvenli katmanında (Secure Enclave) saklanır.</p>
                 </div>
             </div>
             
             <style>
-                @keyframes pulse {
-                    0% { transform: scale(1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
-                    50% { transform: scale(1.02); box-shadow: 0 12px 48px 0 rgba(0, 113, 227, 0.2); }
-                    100% { transform: scale(1); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3); }
+                .scan-line {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 2px;
+                    background: var(--primary);
+                    box-shadow: 0 0 15px var(--primary);
+                    animation: scan 3s linear infinite;
+                }
+                @keyframes scan {
+                    0% { top: 0; }
+                    100% { top: 100%; }
+                }
+                @keyframes blink {
+                    0% { opacity: 1; }
+                    50% { opacity: 0; }
+                    100% { opacity: 1; }
                 }
             </style>
         `,
