@@ -8,8 +8,10 @@ const app = {
         this.initTheme();
         this.initI18n();
         this.bindEvents();
-        this.checkAuth();
         window.addEventListener('hashchange', () => this.router());
+        this.checkAuth();
+        // İlk yüklemede router'ı manuel tetikle
+        this.router();
     },
 
     initTheme() {
