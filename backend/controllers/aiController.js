@@ -25,16 +25,17 @@ exports.chat = async (req, res) => {
         ? "Sen Erken Teşhis AI adında bir sağlık danışmanısın. Kullanıcılara tıbbi konularda genel bilgiler verirsin, ancak her zaman kesin teşhis için bir doktora görünmeleri gerektiğini belirtirsin. Türkçe ve empatik bir dille yanıt ver."
         : "You are Early Diagnosis AI, a professional health advisor. You provide general health information and analysis based on user symptoms and data. Always emphasize that your advice is a preliminary screening and not a professional medical diagnosis, and suggest seeing a doctor for official results. Be empathetic and professional.";
 
-    const response = await ai.models.generateContent({
-      model: MODEL_NAME,
-      contents: contents,
-      config: {
-        systemInstruction: systemInstruction,
-        temperature: 0.7
-      }
+    const model = ai.getGenerativeModel({ 
+      model: "gemini-1.5-flash",
+      systemInstruction: systemInstruction
     });
 
-    const aiMessage = response.text;
+    const result = await model.generateContent({
+      contents: contents
+    });
+
+    const aiResponse = await result.response;
+    const aiMessage = aiResponse.text();
     
     if (req.user && req.user.userId) {
       await db.query(
@@ -75,15 +76,14 @@ exports.analyzeImage = async (req, res) => {
         ? "\nDetaylı, ancak anlaşılır bir dille Türkçe olarak raporla. Unutma: Bu bir ön teşhistir, her zaman kesin karar için doktora görünmeyi tavsiye et."
         : "\nReport in detailed but understandable English. Remember: This is a preliminary screening, always recommend seeing a doctor for a definitive decision.";
 
-    const response = await ai.models.generateContent({
-      model: MODEL_NAME,
-      contents: [
-        { inlineData: { data: base64Image, mimeType: mimeType } },
-        prompt
-      ]
-    });
+    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent([
+      { inlineData: { data: base64Image, mimeType: mimeType } },
+      prompt
+    ]);
 
-    const aiAnalysis = response.text;
+    const aiResponse = await result.response;
+    const aiAnalysis = aiResponse.text();
 
     // Save to database
     await db.query(
@@ -122,12 +122,10 @@ exports.generateReport = async (req, res) => {
         ? `Kullanıcının son 7 günlük sağlık verileri aşağıdadır. Bu verileri analiz ederek detaylı bir "Haftalık Sağlık Raporu" ve "Doktor İçin Özet" oluştur. Türkçe olarak profesyonel bir dille yaz.\n\nVeriler:\n${dataString}`
         : `Below is the user's health data for the last 7 days. Analyze this data to create a detailed "Weekly Health Report" and a "Summary for Doctor". Write in professional English.\n\nData:\n${dataString}`;
 
-    const response = await ai.models.generateContent({
-      model: MODEL_NAME,
-      contents: prompt
-    });
-
-    const reportContent = response.text;
+    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent(prompt);
+    const aiResponse = await result.response;
+    const reportContent = aiResponse.text();
     const newReport = await db.query(
       'INSERT INTO analyses (user_id, type, content) VALUES ($1, $2, $3) RETURNING *',
       [req.user.userId, 'report', reportContent]
@@ -163,12 +161,10 @@ exports.generateDoctorSummary = async (req, res) => {
         ? `Aşağıdaki verileri bir doktorun hızlıca inceleyebileceği profesyonel bir "Doktor Özet Raporu" formatına dönüştür. Kritik değişimleri vurgula, tıbbi terminolojiyi uygun kullan ama hasta için de anlaşılır olsun. Türkçe yaz.\n\nVeriler:\n${dataString}`
         : `Transform the following data into a professional "Doctor Summary Report" format that a doctor can quickly review. Highlight critical changes, use appropriate medical terminology but keep it understandable for the patient. Write in English.\n\nData:\n${dataString}`;
 
-    const response = await ai.models.generateContent({
-      model: MODEL_NAME,
-      contents: prompt
-    });
-
-    const summaryContent = response.text;
+    const model = ai.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const result = await model.generateContent(prompt);
+    const aiResponse = await result.response;
+    const summaryContent = aiResponse.text();
 
     const newReport = await db.query(
       'INSERT INTO analyses (user_id, type, content) VALUES ($1, $2, $3) RETURNING *',

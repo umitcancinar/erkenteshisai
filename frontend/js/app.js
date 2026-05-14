@@ -1177,7 +1177,7 @@ const app = {
         };
         await loadReports();
         
-        document.getElementById('gen-weekly-report').addEventListener('click', async () => {
+        document.getElementById('generate-report-btn').addEventListener('click', async () => {
             try {
                 this.showLoader('loading_report');
                 await api.ai.generateReport(i18n.currentLang);
@@ -1188,7 +1188,7 @@ const app = {
             } finally { this.hideLoader(); }
         });
 
-        document.getElementById('gen-doctor-summary').addEventListener('click', async () => {
+        document.getElementById('generate-summary-btn').addEventListener('click', async () => {
             try {
                 this.showLoader('loading_report');
                 await api.ai.generateDoctorSummary(i18n.currentLang);
