@@ -39,7 +39,7 @@
                 <div class="chatbot-avatar">🏥</div>
                 <div>
                     <div class="chatbot-header-title">Sağlık Asistanı</div>
-                    <div class="chatbot-header-status">Online | Gemini 3.5 AI</div>
+                    <div class="chatbot-header-status">Online | Gemini 3.0 AI</div>
                 </div>
             </div>
             <button class="chatbot-close-btn" id="chatbotCloseBtn">✕</button>
