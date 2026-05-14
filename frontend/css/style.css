@@ -216,6 +216,10 @@ body.sidebar-active header {
     background: rgba(0,0,0,0.2);
 }
 
+.report-header:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
 .user-info {
     display: flex;
     align-items: center;

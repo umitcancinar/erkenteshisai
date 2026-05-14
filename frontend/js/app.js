@@ -1035,14 +1035,40 @@ const app = {
                 const list = document.getElementById('reports-list');
                 if (reports.length === 0) { list.innerHTML = '<p style="color: var(--text-muted)">Henüz bir raporunuz bulunmuyor.</p>'; return; }
                 list.innerHTML = reports.map(r => `
-                    <div class="glass-panel card" style="background: rgba(0,0,0,0.2); margin-bottom: 16px;">
-                        <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 14px; color: var(--text-muted);">
-                            <span><i class='bx bx-time'></i> ${new Date(r.created_at).toLocaleString('tr-TR')}</span>
-                            <span style="background: var(--primary); color: white; padding: 2px 8px; border-radius: 4px; font-size: 12px;">${r.type.toUpperCase()}</span>
+                    <div class="glass-panel card report-item" style="padding: 0; overflow: hidden; margin-bottom: 12px;">
+                        <div class="report-header" style="padding: 16px 24px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03);">
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <i class='bx bx-chevron-right report-chevron' style="transition: transform 0.3s ease;"></i>
+                                <span style="font-weight: 500;">${new Date(r.created_at).toLocaleString('tr-TR')}</span>
+                            </div>
+                            <span class="badge" style="background: var(--primary); color: white; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 600;">${r.type.toUpperCase()}</span>
                         </div>
-                        <div style="line-height: 1.6;">${r.content.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</div>
+                        <div class="report-content" style="padding: 0 24px; max-height: 0; overflow: hidden; transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), padding 0.4s ease;">
+                            <div style="padding: 24px 0; border-top: 1px solid var(--border); line-height: 1.7; color: var(--text-muted);">
+                                ${r.content.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}
+                            </div>
+                        </div>
                     </div>
                 `).join('');
+
+                // Add toggle logic
+                document.querySelectorAll('.report-header').forEach(header => {
+                    header.addEventListener('click', () => {
+                        const item = header.parentElement;
+                        const content = item.querySelector('.report-content');
+                        const chevron = item.querySelector('.report-chevron');
+                        const isOpen = item.classList.toggle('open');
+                        
+                        if (isOpen) {
+                            content.style.maxHeight = content.scrollHeight + 'px';
+                            content.style.padding = '0 24px';
+                            chevron.style.transform = 'rotate(90deg)';
+                        } else {
+                            content.style.maxHeight = '0';
+                            chevron.style.transform = 'rotate(0deg)';
+                        }
+                    });
+                });
             } catch (error) { this.showToast('Raporlar yüklenemedi', 'error'); } finally { this.hideLoader(); }
         };
         await loadReports();
