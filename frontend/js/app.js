@@ -62,8 +62,21 @@ const app = {
         document.getElementById('logout-btn').addEventListener('click', () => this.logout());
     },
 
-    showLoader() { document.getElementById('loader').classList.remove('hidden'); },
-    hideLoader() { document.getElementById('loader').classList.add('hidden'); },
+    showLoader(messageKey) { 
+        const loader = document.getElementById('loader');
+        const loaderMsg = document.getElementById('loader-message');
+        if (messageKey && loaderMsg) {
+            loaderMsg.textContent = i18n.translations[i18n.currentLang][messageKey] || "";
+        } else if (loaderMsg) {
+            loaderMsg.textContent = "";
+        }
+        loader.classList.remove('hidden'); 
+    },
+    hideLoader() { 
+        document.getElementById('loader').classList.add('hidden');
+        const loaderMsg = document.getElementById('loader-message');
+        if (loaderMsg) loaderMsg.textContent = "";
+    },
 
     showToast(message, type = 'success') {
         const toast = document.createElement('div');
@@ -1096,14 +1109,24 @@ const app = {
             formData.append('moodScore', document.getElementById('analysis-mood').value);
             
             try {
-                this.showLoader();
-                resultDiv.innerHTML = '<div class="spinner"></div> Analiz ediliyor...';
+                this.showLoader('loading_image');
+                
+                // Professional progress simulation
+                setTimeout(() => this.showLoader('loading_analyze'), 1500);
+                setTimeout(() => this.showLoader('loading_report'), 3000);
+                setTimeout(() => this.showLoader('loading_connect'), 4500);
+                setTimeout(() => this.showLoader('loading_finalizing'), 6000);
+
+                resultDiv.innerHTML = '<div style="text-align: center; padding: 40px;"><div class="spinner" style="margin: 0 auto 20px;"></div><p data-i18n="loading_analyze">Analyzing...</p></div>';
+                
                 const res = await api.ai.analyzeImage(formData);
                 resultDiv.innerHTML = res.analysis.replace(/\n/g, '<br>').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                this.showToast('Analiz tamamlandı');
+                this.showToast('Analysis completed');
             } catch (error) {
-                resultDiv.innerHTML = 'Hata: ' + error.message;
-            } finally { this.hideLoader(); }
+                resultDiv.innerHTML = 'Error: ' + error.message;
+            } finally { 
+                this.hideLoader(); 
+            }
         });
     },
 
