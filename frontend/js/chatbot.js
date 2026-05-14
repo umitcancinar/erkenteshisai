@@ -64,6 +64,7 @@
     const pupils = toggle.querySelectorAll('.h-pupil');
     function setPupils(dx, dy) { pupils.forEach(p => p.setAttribute('transform', `translate(${dx},${dy})`)); }
     document.addEventListener('mousemove', (e) => {
+        if (!toggle) return;
         const rect = toggle.getBoundingClientRect();
         const cx = rect.left + rect.width / 2, cy = rect.top + rect.height / 2;
         const dx = e.clientX - cx, dy = e.clientY - cy;
@@ -74,11 +75,14 @@
 
     // Greeting animation
     setTimeout(() => { 
-        toggle.classList.add('greeting'); 
-        setTimeout(() => toggle.classList.remove('greeting'), 1700); 
+        if (toggle) {
+            toggle.classList.add('greeting'); 
+            setTimeout(() => toggle.classList.remove('greeting'), 1700); 
+        }
     }, 1000);
 
     function addMsg(text, isUser) {
+        if (!messages) return;
         const div = document.createElement('div');
         div.className = 'chatbot-msg ' + (isUser ? 'user' : 'bot');
         div.innerHTML = `
@@ -90,6 +94,7 @@
     }
 
     function showTyping() {
+        if (!messages) return;
         const div = document.createElement('div');
         div.className = 'chatbot-typing';
         div.id = 'typingIndicator';
@@ -124,33 +129,37 @@
         }
     }
 
-    toggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = windowEl.classList.toggle('open');
-        if (isOpen && messages.children.length === 0) {
-            addMsg('Merhaba! 👋 Ben Erken Teşhis AI asistanıyım. Sağlığınızla ilgili her şeyi sorabilirsiniz.', false);
-            addMsg('Semptomlarınızı yazabilir veya nasıl çalıştığımızı sorabilirsiniz.', false);
-        }
-    });
+    if (toggle) {
+        toggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isOpen = windowEl.classList.toggle('open');
+            if (isOpen && messages.children.length === 0) {
+                addMsg('Merhaba! 👋 Ben Erken Teşhis AI asistanıyım. Sağlığınızla ilgili her şeyi sorabilirsiniz.', false);
+                addMsg('Semptomlarınızı yazabilir veya nasıl çalıştığımızı sorabilirsiniz.', false);
+            }
+        });
+    }
 
-    closeBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        windowEl.classList.remove('open');
-    });
+    if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            windowEl.classList.remove('open');
+        });
+    }
 
     // Close on outside click
     document.addEventListener('click', (e) => {
-        if (windowEl.classList.contains('open') && !windowEl.contains(e.target) && !toggle.contains(e.target)) {
+        if (windowEl && windowEl.classList.contains('open') && !windowEl.contains(e.target) && !toggle.contains(e.target)) {
             windowEl.classList.remove('open');
         }
     });
 
-    // Prevent clicks inside window from closing it
-    windowEl.addEventListener('click', (e) => e.stopPropagation());
+    if (windowEl) {
+        // Prevent clicks inside window from closing it
+        windowEl.addEventListener('click', (e) => e.stopPropagation());
+    }
 
-    sendBtn.addEventListener('click', () => processMessage(input.value));
-    input.addEventListener('keydown', (e) => { if (e.key === 'Enter') processMessage(input.value); });
-
-})();
+    if (sendBtn) sendBtn.addEventListener('click', () => processMessage(input.value));
+    if (input) input.addEventListener('keydown', (e) => { if (e.key === 'Enter') processMessage(input.value); });
 
 })();
