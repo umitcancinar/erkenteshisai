@@ -746,25 +746,53 @@ h1, h2, h3 {
     margin: 0 auto 20px;
 }
 
-/* Responsive Landing */
-@media (max-width: 768px) {
-    header { height: auto; padding: 10px; }
-    .nav-container { flex-direction: column; gap: 10px; }
-    .nav-left { gap: 12px; }
-    .nav-right { gap: 12px; font-size: 12px; }
-    .hero h1 { font-size: 40px; }
-    .features-grid { grid-template-columns: 1fr; }
-    .steps { flex-direction: column; }
-    
-    #sidebar {
-        transform: translateX(-120%);
-        transition: var(--transition);
-        left: 0;
-        top: 0;
-        bottom: 0;
-        border-radius: 0;
+/* Mobile Refinements & Responsiveness */
+@media (max-width: 1024px) {
+    :root {
+        --sidebar-width: 240px;
     }
-    
+    #main-content {
+        padding: 84px 20px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    :root {
+        --sidebar-width: 0px;
+    }
+
+    body {
+        padding-bottom: 70px; /* Space for mobile nav if we add one */
+    }
+
+    header {
+        height: 60px;
+        padding: 0 20px;
+    }
+
+    .nav-container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .nav-left {
+        display: none; /* Hide landing links on mobile header */
+    }
+
+    .nav-right {
+        gap: 15px;
+    }
+
+    #sidebar {
+        width: 280px;
+        transform: translateX(-100%);
+        transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 20px 0 50px rgba(0,0,0,0.5);
+        background: var(--bg-secondary);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
     #sidebar.show {
         transform: translateX(0);
     }
@@ -772,14 +800,122 @@ h1, h2, h3 {
     #main-content {
         margin-left: 0;
         width: 100%;
-        padding: 16px;
+        padding: 80px 16px 24px;
     }
-    
+
     .dashboard-grid {
         grid-template-columns: 1fr;
+        gap: 16px;
     }
-    
+
     .col-4, .col-6, .col-8, .col-12 {
         grid-column: span 1 !important;
     }
+
+    .hero h1 {
+        font-size: 36px;
+        padding: 0 10px;
+    }
+
+    .hero p {
+        font-size: 16px;
+        padding: 0 20px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        padding: 0 20px;
+    }
+
+    .steps {
+        flex-direction: column;
+        gap: 30px;
+    }
+
+    /* Fix Input Zoom on iOS */
+    .form-control, .chat-input-area input, select, textarea {
+        font-size: 16px !important;
+    }
+
+    .auth-box {
+        padding: 30px 20px;
+        max-width: 90%;
+    }
+
+    .chat-container {
+        height: calc(100vh - 140px);
+    }
+
+    .chat-messages {
+        padding: 16px;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+
+    /* Mobile Menu Toggle Button */
+    .mobile-toggle {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: rgba(255,255,255,0.05);
+        border-radius: 10px;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .view-section.page-header {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 16px;
+    }
+
+    .view-section.page-header div {
+        width: 100%;
+    }
+
+    .view-section.page-header button {
+        width: 100% !important;
+    }
+}
+
+/* Sidebar Overlay for mobile */
+.sidebar-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(4px);
+    z-index: 1050;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.show {
+    display: block;
+    opacity: 1;
+}
+
+/* Form refinement */
+.form-group label {
+    font-size: 13px;
+    letter-spacing: 0.01em;
+}
+
+.form-control {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    height: 48px;
+}
+
+.form-control:focus {
+    background: rgba(255,255,255,0.05);
+}
+
+textarea.form-control {
+    height: auto;
+    min-height: 100px;
 }

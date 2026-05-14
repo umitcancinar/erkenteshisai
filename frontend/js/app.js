@@ -8,10 +8,30 @@ const app = {
         this.initTheme();
         this.initI18n();
         this.bindEvents();
+        this.initMobileMenu();
         window.addEventListener('hashchange', () => this.router());
         this.checkAuth();
-        // İlk yüklemede router'ı manuel tetikle
         this.router();
+    },
+
+    initMobileMenu() {
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const sidebar = document.getElementById('sidebar');
+        
+        if (mobileToggle) {
+            mobileToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('show');
+                sidebarOverlay.classList.toggle('show');
+            });
+        }
+        
+        if (sidebarOverlay) {
+            sidebarOverlay.addEventListener('click', () => {
+                sidebar.classList.remove('show');
+                sidebarOverlay.classList.remove('show');
+            });
+        }
     },
 
     initTheme() {
@@ -64,12 +84,15 @@ const app = {
         const headerRegister = document.getElementById('header-register');
         const headerWelcome = document.getElementById('header-user-welcome');
 
+        const mobileToggle = document.getElementById('mobile-menu-toggle');
+
         if (!token) {
             this.user = null;
             if (headerLogin) headerLogin.classList.remove('hidden');
             if (headerRegister) headerRegister.classList.remove('hidden');
             if (headerWelcome) headerWelcome.classList.add('hidden');
             document.getElementById('sidebar').classList.add('hidden');
+            if (mobileToggle) mobileToggle.style.display = 'none';
             if (window.location.hash !== '#landing' && window.location.hash !== '#login' && window.location.hash !== '#register') {
                 window.location.hash = '#landing';
             }
@@ -96,6 +119,9 @@ const app = {
             } else {
                 document.getElementById('admin-nav').classList.add('hidden');
             }
+            
+            const mobileToggle = document.getElementById('mobile-menu-toggle');
+            if (mobileToggle) mobileToggle.style.display = 'flex';
             
             if (window.location.hash === '' || window.location.hash === '#login' || window.location.hash === '#register') {
                 window.location.hash = '#dashboard';
@@ -156,6 +182,14 @@ const app = {
             mainContent.style.marginLeft = 'var(--sidebar-width)';
             mainContent.style.width = 'calc(100% - var(--sidebar-width))';
             mainContent.style.padding = '84px 40px 40px';
+        }
+
+        // Close sidebar on mobile after route change
+        const sidebar = document.getElementById('sidebar');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        if (sidebar.classList.contains('show')) {
+            sidebar.classList.remove('show');
+            sidebarOverlay.classList.remove('show');
         }
 
         // Redirect to landing if not authenticated
