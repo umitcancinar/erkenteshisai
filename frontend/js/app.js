@@ -1165,7 +1165,7 @@ const app = {
                 msgsContainer.appendChild(aiDiv);
                 msgsContainer.scrollTop = msgsContainer.scrollHeight;
 
-                this.chatHistory.push({ role: 'user', text: message });
+                this.chatHistory.push({ role: 'user', text: text });
                 this.chatHistory.push({ role: 'model', text: res.response });
             } catch (error) {
                 document.getElementById('typing-indicator')?.remove();
