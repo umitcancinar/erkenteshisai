@@ -57,10 +57,13 @@ const api = {
     },
 
     ai: {
-        chat: (message, history, lang = 'TR') => api.request('/ai/chat', { method: 'POST', body: JSON.stringify({ message, history, lang }) }),
-        analyzeImage: (formData) => api.request('/ai/analyze-image', { method: 'POST', body: formData }),
-        generateReport: (lang = 'TR') => api.request('/ai/generate-report', { method: 'POST', body: JSON.stringify({ lang }) }),
-        generateDoctorSummary: (lang = 'TR') => api.request('/ai/generate-doctor-summary', { method: 'POST', body: JSON.stringify({ lang }) }),
+        chat: (message, history, lang = i18n.currentLang) => api.request('/ai/chat', { method: 'POST', body: JSON.stringify({ message, history, lang }) }),
+        analyzeImage: (formData) => {
+            formData.append('lang', i18n.currentLang);
+            return api.request('/ai/analyze-image', { method: 'POST', body: formData });
+        },
+        generateReport: (lang = i18n.currentLang) => api.request('/ai/generate-report', { method: 'POST', body: JSON.stringify({ lang }) }),
+        generateDoctorSummary: (lang = i18n.currentLang) => api.request('/ai/generate-doctor-summary', { method: 'POST', body: JSON.stringify({ lang }) }),
         getReports: () => api.request('/ai/reports')
     },
 

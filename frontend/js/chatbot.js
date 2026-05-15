@@ -118,7 +118,10 @@
             const res = await fetch(`${API_URL}/ai/chat`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: text })
+                body: JSON.stringify({ 
+                    message: text,
+                    lang: i18n.currentLang
+                })
             });
             const data = await res.json();
             const t = i18n.translations[i18n.currentLang];
