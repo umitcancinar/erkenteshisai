@@ -124,6 +124,7 @@
                 })
             });
             const data = await res.json();
+            hideTyping();
             const t = i18n.translations[i18n.currentLang];
             addMsg(data.response || t.chat_default_resp, false);
         } catch (error) {
