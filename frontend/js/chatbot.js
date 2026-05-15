@@ -137,14 +137,19 @@
         toggle.addEventListener('click', (e) => {
             e.stopPropagation();
             const isOpen = windowEl.classList.toggle('open');
-            if (isOpen && messages.children.length === 0) {
+            if (isOpen) {
                 const t = i18n.translations[i18n.currentLang];
-                document.getElementById('cb-title').textContent = t.chat_title;
-                document.getElementById('cb-status').textContent = t.chat_status;
-                document.getElementById('chatbotInput').placeholder = t.chat_placeholder;
-                
-                addMsg(t.chat_greet_1, false);
-                addMsg(t.chat_greet_2, false);
+                const title = document.getElementById('cb-title');
+                const status = document.getElementById('cb-status');
+                const inputEl = document.getElementById('chatbotInput');
+                if (title) title.textContent = t.chat_title;
+                if (status) status.textContent = t.chat_status;
+                if (inputEl) inputEl.placeholder = t.chat_placeholder;
+
+                if (messages.children.length === 0) {
+                    addMsg(t.chat_greet_1, false);
+                    addMsg(t.chat_greet_2, false);
+                }
             }
         });
     }
@@ -170,5 +175,16 @@
 
     if (sendBtn) sendBtn.addEventListener('click', () => processMessage(input.value));
     if (input) input.addEventListener('keydown', (e) => { if (e.key === 'Enter') processMessage(input.value); });
+
+    // Sync with language changes
+    window.addEventListener('langChanged', (e) => {
+        const t = i18n.translations[e.detail];
+        const title = document.getElementById('cb-title');
+        const status = document.getElementById('cb-status');
+        const inputEl = document.getElementById('chatbotInput');
+        if (title) title.textContent = t.chat_title;
+        if (status) status.textContent = t.chat_status;
+        if (inputEl) inputEl.placeholder = t.chat_placeholder;
+    });
 
 })();

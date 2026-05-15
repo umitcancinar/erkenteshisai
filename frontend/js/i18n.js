@@ -243,6 +243,7 @@ const i18n = {
         localStorage.setItem('lang', this.currentLang);
         this.apply();
         document.getElementById('current-lang').textContent = this.currentLang;
+        window.dispatchEvent(new CustomEvent('langChanged', { detail: this.currentLang }));
     },
     
     apply() {
