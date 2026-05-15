@@ -185,6 +185,15 @@
         if (title) title.textContent = t.chat_title;
         if (status) status.textContent = t.chat_status;
         if (inputEl) inputEl.placeholder = t.chat_placeholder;
+
+        // If there are only greeting messages (and no user interaction), refresh them
+        const msgs = messages.querySelectorAll('.chatbot-msg.bot');
+        const userMsgs = messages.querySelectorAll('.chatbot-msg.user');
+        if (userMsgs.length === 0 && msgs.length > 0) {
+            messages.innerHTML = '';
+            addMsg(t.chat_greet_1, false);
+            addMsg(t.chat_greet_2, false);
+        }
     });
 
 })();
