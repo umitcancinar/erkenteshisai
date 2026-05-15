@@ -124,7 +124,8 @@ const app = {
             if (headerRegister) headerRegister.classList.add('hidden');
             if (landingLinks) landingLinks.classList.add('hidden');
             if (headerWelcome) {
-                headerWelcome.innerHTML = `<span data-i18n="welcome_user" style="color: var(--text-muted); font-size: 14px; font-weight: 500;">Merhaba, </span><span style="color: var(--accent); font-weight: 800;">${this.user.username}</span>`;
+                const welcomePrefix = i18n.translations[i18n.currentLang].welcome_user;
+                headerWelcome.innerHTML = `<span style="color: var(--text-muted); font-size: 14px; font-weight: 500;">${welcomePrefix}</span><span style="color: var(--accent); font-weight: 800;">${this.user.username}</span>`;
                 headerWelcome.classList.remove('hidden');
             }
 
@@ -458,7 +459,7 @@ const app = {
         dataEntry: () => `
             <div class="view-section page-header">
                 <h1 data-i18n="nav_data">Veriler</h1>
-                <p>Günlük sağlık metriklerinizi buradan kaydedebilirsiniz.</p>
+                <p data-i18n="nav_data_desc">Günlük sağlık metriklerinizi buradan kaydedebilirsiniz.</p>
             </div>
             
             <div class="view-section" style="max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 32px;">
@@ -711,7 +712,7 @@ const app = {
         chat: () => `
             <div class="view-section page-header">
                 <h1 data-i18n="nav_chat">Sağlık Danışmanı</h1>
-                <p>Yapay zeka asistanımızla sağlık durumunuz hakkında konuşun.</p>
+                <p data-i18n="nav_chat_desc">Yapay zeka asistanımızla sağlık durumunuz hakkında konuşun.</p>
             </div>
             
             <div class="glass-panel chat-container view-section">
