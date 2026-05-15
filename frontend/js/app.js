@@ -99,11 +99,14 @@ const app = {
 
         const mobileToggle = document.getElementById('mobile-menu-toggle');
 
+        const landingLinks = document.getElementById('landing-links');
+
         if (!token) {
             this.user = null;
             if (headerLogin) headerLogin.classList.remove('hidden');
             if (headerRegister) headerRegister.classList.remove('hidden');
             if (headerWelcome) headerWelcome.classList.add('hidden');
+            if (landingLinks) landingLinks.classList.remove('hidden');
             document.getElementById('sidebar').classList.add('hidden');
             if (mobileToggle) mobileToggle.classList.remove('logged-in');
             if (window.location.hash !== '#landing' && window.location.hash !== '#login' && window.location.hash !== '#register') {
@@ -119,8 +122,9 @@ const app = {
             // Header Sync
             if (headerLogin) headerLogin.classList.add('hidden');
             if (headerRegister) headerRegister.classList.add('hidden');
+            if (landingLinks) landingLinks.classList.add('hidden');
             if (headerWelcome) {
-                headerWelcome.innerHTML = `<span data-i18n="welcome_user">Welcome, </span>${this.user.username}`;
+                headerWelcome.innerHTML = `<span data-i18n="welcome_user" style="color: var(--text-muted); font-size: 14px; font-weight: 500;">Merhaba, </span><span style="color: var(--accent); font-weight: 800;">${this.user.username}</span>`;
                 headerWelcome.classList.remove('hidden');
             }
 
@@ -155,9 +159,11 @@ const app = {
         const headerLogin = document.getElementById('header-login');
         const headerRegister = document.getElementById('header-register');
         const headerWelcome = document.getElementById('header-user-welcome');
+        const landingLinks = document.getElementById('landing-links');
         
         if (headerLogin) headerLogin.classList.remove('hidden');
         if (headerRegister) headerRegister.classList.remove('hidden');
+        if (landingLinks) landingLinks.classList.remove('hidden');
         if (headerWelcome) headerWelcome.classList.add('hidden');
 
         document.getElementById('sidebar').classList.add('hidden');
