@@ -570,6 +570,7 @@ const app = {
             </div>
         `,
 
+        faceId: () => `
             <div class="view-section page-header">
                 <h1 data-i18n="auto_data_header">Otomatik Veri Entegrasyonu</h1>
                 <p data-i18n="auto_data_desc">Bu panelden cihazınızdaki ve uygulamalarınızdaki verilerin AI modelimize aktarımını yönetebilirsiniz.</p>
@@ -688,7 +689,7 @@ const app = {
                                 </div>
                             </div>
                             <div id="why-habits" class="why-section">
-                                <p data-i18n="why_habits">Ekran süresi ve uygulama kullanımı gibi alışkanlıkların ruh hali üzerindeki etkisini ölçmek için.</p>
+                                <p data-i18n="why_habits">Ekran süresi, parlaklık seviyesi ve en çok vakit geçirilen uygulamaların analizi ile kullanım alışkanlıklarınızın sağlığınız üzerindeki etkisini ölçmek için.</p>
                             </div>
                         </div>
                     </div>
@@ -699,8 +700,7 @@ const app = {
                 </div>
             </div>
             
-        `
-        ,
+        `,
 
         chat: () => `
             <div class="view-section page-header">
