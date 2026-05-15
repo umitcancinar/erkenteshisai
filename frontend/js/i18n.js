@@ -107,7 +107,17 @@ const i18n = {
             health_app_label: "Sağlık Uygulaması Verileri",
             google_search_label: "Google Arama Kayıtları",
             user_habits_label: "Cihaz Kullanım Alışkanlıkları",
-            analysis_data_placeholder: "Örn: Gözlerimde kızarıklık ve kaşıntı var..."
+            analysis_data_placeholder: "Örn: Gözlerimde kızarıklık ve kaşıntı var...",
+            not_available: "BU KISIM HENÜZ KULLANIMA AÇILMAMIŞTIR",
+            chat_title: "Sağlık Asistanı",
+            chat_status: "Çevrimiçi | Gemini 3.0 AI",
+            chat_placeholder: "Semptomlarınızı yazın...",
+            chat_greet_1: "Merhaba! 👋 Ben Erken Teşhis AI asistanıyım. Sağlığınızla ilgili her şeyi sorabilirsiniz.",
+            chat_greet_2: "Semptomlarınızı yazabilir veya nasıl çalıştığımızı sorabilirsiniz.",
+            chat_error: "Bağlantı hatası oluştu. Lütfen tekrar deneyin.",
+            chat_default_resp: "Üzgünüm, şu an yanıt veremiyorum.",
+            advisor_greet: "Merhaba, ben Erken Teşhis AI. Size nasıl yardımcı olabilirim? Herhangi bir semptomunuz mu var?",
+            advisor_placeholder: "Şikayetiniz veya sorunuz nedir?"
         },
         EN: {
             nav_home: "Home",
@@ -214,7 +224,18 @@ const i18n = {
             health_app_label: "Health App Data",
             google_search_label: "Google Search Records",
             user_habits_label: "Device Usage Habits",
-            analysis_data_placeholder: "e.g. Redness and itching in my eyes..."
+            analysis_data_placeholder: "e.g. Redness and itching in my eyes...",
+            not_available: "THIS SECTION IS NOT YET OPEN FOR USE",
+            chat_title: "Health Advisor",
+            chat_status: "Online | Gemini 3.0 AI",
+            chat_placeholder: "Type your symptoms...",
+            chat_greet_1: "Hello! 👋 I'm the Early Diagnosis AI assistant. You can ask anything about your health.",
+            chat_greet_2: "You can type your symptoms or ask how we work.",
+            chat_error: "Connection error occurred. Please try again.",
+            chat_default_resp: "Sorry, I cannot respond right now.",
+            advisor_greet: "Hello, I'm Early Diagnosis AI. How can I help you? Do you have any symptoms?",
+            advisor_placeholder: "What is your complaint or question?"
+        }
         }
     },
     

@@ -7,7 +7,7 @@
     
     // Character SVG
     const charSvg = `
-    <div class="chatbot-char" id="chatbotChar" title="AI Sağlık Asistanı">
+    <div class="chatbot-char" id="chatbotChar">
         <svg viewBox="0 0 80 80" fill="none">
             <defs>
                 <linearGradient id="cCharGrad" x1="0" y1="0" x2="0" y2="1">
@@ -38,8 +38,8 @@
             <div class="chatbot-header-info">
                 <div class="chatbot-avatar">🏥</div>
                 <div>
-                    <div class="chatbot-header-title">Sağlık Asistanı</div>
-                    <div class="chatbot-header-status">Online | Gemini 3.0 AI</div>
+                    <div class="chatbot-header-title" id="cb-title"></div>
+                    <div class="chatbot-header-status" id="cb-status"></div>
                 </div>
             </div>
             <button class="chatbot-close-btn" id="chatbotCloseBtn">✕</button>
@@ -47,7 +47,7 @@
         <div class="chatbot-messages" id="chatbotMessages"></div>
         <div class="chatbot-quick-replies" id="chatbotQuickReplies"></div>
         <div class="chatbot-input-row">
-            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Semptomlarınızı yazın...">
+            <input type="text" class="chatbot-input" id="chatbotInput">
             <button class="chatbot-send-btn" id="chatbotSendBtn">➤</button>
         </div>
     </div>`;
@@ -121,11 +121,12 @@
                 body: JSON.stringify({ message: text })
             });
             const data = await res.json();
-            hideTyping();
-            addMsg(data.response || 'Üzgünüm, şu an yanıt veremiyorum.', false);
+            const t = i18n.translations[i18n.currentLang];
+            addMsg(data.response || t.chat_default_resp, false);
         } catch (error) {
             hideTyping();
-            addMsg('Bağlantı hatası oluştu. Lütfen tekrar deneyin.', false);
+            const t = i18n.translations[i18n.currentLang];
+            addMsg(t.chat_error, false);
         }
     }
 
@@ -134,8 +135,13 @@
             e.stopPropagation();
             const isOpen = windowEl.classList.toggle('open');
             if (isOpen && messages.children.length === 0) {
-                addMsg('Merhaba! 👋 Ben Erken Teşhis AI asistanıyım. Sağlığınızla ilgili her şeyi sorabilirsiniz.', false);
-                addMsg('Semptomlarınızı yazabilir veya nasıl çalıştığımızı sorabilirsiniz.', false);
+                const t = i18n.translations[i18n.currentLang];
+                document.getElementById('cb-title').textContent = t.chat_title;
+                document.getElementById('cb-status').textContent = t.chat_status;
+                document.getElementById('chatbotInput').placeholder = t.chat_placeholder;
+                
+                addMsg(t.chat_greet_1, false);
+                addMsg(t.chat_greet_2, false);
             }
         });
     }

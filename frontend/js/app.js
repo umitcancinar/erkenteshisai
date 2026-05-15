@@ -702,7 +702,7 @@ const app = {
                     </div>
                 </div>
                 
-                <div style="margin-top: 50px; text-align: center; font-size: 24px; font-weight: 800; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; animation: fadeIn 1s ease-out;">
+                <div data-i18n="not_available" style="margin-top: 50px; text-align: center; font-size: 24px; font-weight: 800; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; animation: fadeIn 1s ease-out;">
                     BU KISIM HENÜZ KULLANIMA AÇILMAMIŞTIR
                 </div>
             </div>
@@ -717,12 +717,12 @@ const app = {
             
             <div class="glass-panel chat-container view-section">
                 <div class="chat-messages" id="chat-messages">
-                    <div class="message msg-ai">
+                    <div class="message msg-ai" data-i18n="advisor_greet">
                         Merhaba, ben Erken Teşhis AI. Size nasıl yardımcı olabilirim? Herhangi bir semptomunuz mu var?
                     </div>
                 </div>
                 <div class="chat-input-area">
-                    <input type="text" id="chat-input" placeholder="Şikayetiniz veya sorunuz nedir?" autocomplete="off">
+                    <input type="text" id="chat-input" data-i18n="advisor_placeholder" placeholder="Şikayetiniz veya sorunuz nedir?" autocomplete="off">
                     <button id="chat-send"><i class='bx bx-send'></i></button>
                 </div>
             </div>
