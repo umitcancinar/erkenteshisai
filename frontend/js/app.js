@@ -361,7 +361,11 @@ const app = {
                             <label data-i18n="lbl_password">Şifre</label>
                             <input type="password" id="login-password" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary" data-i18n="btn_login">Giriş Yap</button>
+                        <div class="form-group" style="display: flex; align-items: flex-start; gap: 10px; margin-top: 20px;">
+                            <input type="checkbox" id="login-kvkk" style="width: 18px; height: 18px; cursor: pointer; margin-top: 3px;">
+                            <label for="login-kvkk" style="font-size: 13px; color: var(--text-muted); line-height: 1.4; cursor: pointer;" data-i18n="kvkk_consent">KVKK metnini okudum ve verilerimin işlenmesine onay veriyorum.</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary" data-i18n="btn_login" style="margin-top: 15px;">Giriş Yap</button>
                     </form>
                     
                     <div class="toggle-auth">
@@ -393,7 +397,11 @@ const app = {
                             <label data-i18n="lbl_password">Şifre</label>
                             <input type="password" id="reg-password" class="form-control" required minlength="6">
                         </div>
-                        <button type="submit" class="btn btn-accent" data-i18n="btn_register">Kayıt Ol</button>
+                        <div class="form-group" style="display: flex; align-items: flex-start; gap: 10px; margin-top: 20px;">
+                            <input type="checkbox" id="reg-kvkk" style="width: 18px; height: 18px; cursor: pointer; margin-top: 3px;">
+                            <label for="reg-kvkk" style="font-size: 13px; color: var(--text-muted); line-height: 1.4; cursor: pointer;" data-i18n="kvkk_consent">KVKK metnini okudum ve verilerimin işlenmesine onay veriyorum.</label>
+                        </div>
+                        <button type="submit" class="btn btn-accent" data-i18n="btn_register" style="margin-top: 15px;">Kayıt Ol</button>
                     </form>
                     
                     <div class="toggle-auth">
@@ -562,58 +570,137 @@ const app = {
             </div>
         `,
 
-        faceId: () => `
-            <div class="view-section page-header" style="text-align: center;">
-                <h1 data-i18n="nav_face_id">Face Recognition Access</h1>
-                <p data-i18n="nav_face_id_desc">Allow background automatic health scanning.</p>
+            <div class="view-section page-header">
+                <h1 data-i18n="auto_data_header">Otomatik Veri Entegrasyonu</h1>
+                <p data-i18n="auto_data_desc">Bu panelden cihazınızdaki ve uygulamalarınızdaki verilerin AI modelimize aktarımını yönetebilirsiniz.</p>
             </div>
             
-            <div class="view-section" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 50vh;">
-                <div class="glass-panel" style="padding: 50px; text-align: center; max-width: 600px; border-radius: 35px; border: 1px solid var(--border); background: rgba(255,255,255,0.02);">
-                    <div style="font-size: 70px; margin-bottom: 24px; color: var(--primary); animation: float 3s ease-in-out infinite;">
-                        <i class='bx bx-face'></i>
-                    </div>
-                    <h2 style="margin-bottom: 20px;" data-i18n="face_header">Smart Background Scanning</h2>
-                    <p style="color: var(--text-muted); margin-bottom: 30px; line-height: 1.7; font-size: 15px;" data-i18n="face_desc">
-                        When enabled, the device camera automatically takes a low-power image whenever a face is detected in the background and sends it for AI analysis.
-                    </p>
-                    
-                    <div style="margin-bottom: 35px;">
-                        <span class="badge" style="background: rgba(0, 113, 227, 0.1); color: var(--primary); padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 13px;" data-i18n="demo_stage">
-                            Currently in Demo Stage
-                        </span>
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.05); padding: 20px 30px; border-radius: 20px; width: 100%;">
-                        <div style="text-align: left;">
-                            <div style="font-weight: 600; font-size: 16px;" data-i18n="face_permission">Auto Analysis Permission</div>
-                            <div style="font-size: 13px; color: var(--text-muted);" data-i18n="face_sub">Scan every time a face is detected</div>
+            <div class="view-section" style="max-width: 800px; margin: 0 auto;">
+                <div class="glass-panel" style="padding: 0; border-radius: 20px; overflow: hidden; border: 1px solid var(--border);">
+                    <div class="settings-list">
+                        <!-- Face Recognition -->
+                        <div class="settings-item-container">
+                            <div class="settings-item" onclick="app.toggleWhy('why-face')">
+                                <div class="item-left">
+                                    <div class="item-icon" style="background: rgba(0, 113, 227, 0.1); color: #0071e3;"><i class='bx bx-face'></i></div>
+                                    <span data-i18n="face_label">Yüz Tanıma</span>
+                                </div>
+                                <div class="item-right">
+                                    <label class="apple-switch">
+                                        <input type="checkbox" id="auto-face" onchange="event.stopPropagation()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="why-face" class="why-section">
+                                <p data-i18n="why_face">Yüz hatlarınızdan stres, yorgunluk ve cilt sağlığı analizi yapabilmek için.</p>
+                            </div>
                         </div>
-                        <label class="apple-switch">
-                            <input type="checkbox" id="face-recognition-toggle">
-                            <span class="slider round"></span>
-                        </label>
+
+                        <!-- Blood Pressure -->
+                        <div class="settings-item-container">
+                            <div class="settings-item" onclick="app.toggleWhy('why-bp')">
+                                <div class="item-left">
+                                    <div class="item-icon" style="background: rgba(239, 68, 68, 0.1); color: #ef4444;"><i class='bx bx-droplet'></i></div>
+                                    <span data-i18n="bp_label">Tansiyon Aleti</span>
+                                </div>
+                                <div class="item-right">
+                                    <label class="apple-switch">
+                                        <input type="checkbox" id="auto-bp" onchange="event.stopPropagation()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="why-bp" class="why-section">
+                                <p data-i18n="why_bp">Tansiyon verilerinizi takip ederek kardiyovasküler risk analizi sunabilmek için.</p>
+                            </div>
+                        </div>
+
+                        <!-- Sleep -->
+                        <div class="settings-item-container">
+                            <div class="settings-item" onclick="app.toggleWhy('why-sleep')">
+                                <div class="item-left">
+                                    <div class="item-icon" style="background: rgba(16, 185, 129, 0.1); color: #10b981;"><i class='bx bx-moon'></i></div>
+                                    <span data-i18n="sleep_label">Uyku Takibi</span>
+                                </div>
+                                <div class="item-right">
+                                    <label class="apple-switch">
+                                        <input type="checkbox" id="auto-sleep" onchange="event.stopPropagation()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="why-sleep" class="why-section">
+                                <p data-i18n="why_sleep">Uyku kalitenizin genel sağlığınız üzerindeki etkilerini raporlayabilmek için.</p>
+                            </div>
+                        </div>
+
+                        <!-- Health App -->
+                        <div class="settings-item-container">
+                            <div class="settings-item" onclick="app.toggleWhy('why-health')">
+                                <div class="item-left">
+                                    <div class="item-icon" style="background: rgba(255, 159, 10, 0.1); color: #ff9f0a;"><i class='bx bx-heart'></i></div>
+                                    <span data-i18n="health_app_label">Sağlık Uygulaması Verileri</span>
+                                </div>
+                                <div class="item-right">
+                                    <label class="apple-switch">
+                                        <input type="checkbox" id="auto-health" onchange="event.stopPropagation()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="why-health" class="why-section">
+                                <p data-i18n="why_health">Fiziksel aktivite ve diğer sağlık metriklerinizi merkezi bir noktada toplamak için.</p>
+                            </div>
+                        </div>
+
+                        <!-- Google Search -->
+                        <div class="settings-item-container">
+                            <div class="settings-item" onclick="app.toggleWhy('why-google')">
+                                <div class="item-left">
+                                    <div class="item-icon" style="background: rgba(144, 144, 144, 0.1); color: #909090;"><i class='bx bxl-google'></i></div>
+                                    <span data-i18n="google_search_label">Google Arama Kayıtları</span>
+                                </div>
+                                <div class="item-right">
+                                    <label class="apple-switch">
+                                        <input type="checkbox" id="auto-google" onchange="event.stopPropagation()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="why-google" class="why-section">
+                                <p data-i18n="why_google">Sağlık odaklı aramalarınızı analiz ederek olası endişelerinizi anlamak için.</p>
+                            </div>
+                        </div>
+
+                        <!-- User Habits -->
+                        <div class="settings-item-container">
+                            <div class="settings-item" onclick="app.toggleWhy('why-habits')">
+                                <div class="item-left">
+                                    <div class="item-icon" style="background: rgba(88, 86, 214, 0.1); color: #5856d6;"><i class='bx bx-time-five'></i></div>
+                                    <span data-i18n="user_habits_label">Cihaz Kullanım Alışkanlıkları</span>
+                                </div>
+                                <div class="item-right">
+                                    <label class="apple-switch">
+                                        <input type="checkbox" id="auto-habits" onchange="event.stopPropagation()">
+                                        <span class="slider round"></span>
+                                    </label>
+                                </div>
+                            </div>
+                            <div id="why-habits" class="why-section">
+                                <p data-i18n="why_habits">Ekran süresi ve uygulama kullanımı gibi alışkanlıkların ruh hali üzerindeki etkisini ölçmek için.</p>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div style="margin-top: 30px; font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 8px; justify-content: center;" data-i18n="face_lock">
-                        <i class='bx bx-lock-alt'></i> Your data is protected by Secure Enclave.
-                    </div>
+                </div>
+                
+                <div style="margin-top: 30px; text-align: center; font-size: 13px; color: var(--text-muted);">
+                    <i class='bx bx-shield-quarter' style="color: var(--accent);"></i> Verileriniz Apple Secure Enclave teknolojisiyle şifrelenir.
                 </div>
             </div>
             
-            <style>
-                .apple-switch { position: relative; display: inline-block; width: 50px; height: 28px; }
-                .apple-switch input { opacity: 0; width: 0; height: 0; }
-                .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #39393d; transition: .4s; border-radius: 34px; }
-                .slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
-                input:checked + .slider { background-color: #34c759; }
-                input:checked + .slider:before { transform: translateX(22px); }
-                @keyframes float {
-                    0%, 100% { transform: translateY(0); }
-                    50% { transform: translateY(-10px); }
-                }
-            </style>
-        `,
+        `
+        ,
 
         chat: () => `
             <div class="view-section page-header">
@@ -779,6 +866,12 @@ const app = {
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 try {
+                    const kvkk = document.getElementById('login-kvkk').checked;
+                    if (!kvkk) {
+                        this.showToast(i18n.translations[i18n.currentLang].kvkk_error || 'Lütfen KVKK onayını kabul edin', 'error');
+                        return;
+                    }
+
                     this.showLoader();
                     const email = document.getElementById('login-email').value;
                     const password = document.getElementById('login-password').value;
@@ -812,6 +905,12 @@ const app = {
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
                 try {
+                    const kvkk = document.getElementById('reg-kvkk').checked;
+                    if (!kvkk) {
+                        this.showToast(i18n.translations[i18n.currentLang].kvkk_error || 'Lütfen KVKK onayını kabul edin', 'error');
+                        return;
+                    }
+
                     this.showLoader();
                     const username = document.getElementById('reg-username').value;
                     const email = document.getElementById('reg-email').value;
@@ -1218,16 +1317,32 @@ const app = {
     },
 
     initFaceIdView() {
-        const toggle = document.getElementById('face-recognition-toggle');
-        if (toggle) {
-            // Restore state from localStorage
-            const isEnabled = localStorage.getItem('faceRecognitionEnabled') === 'true';
-            toggle.checked = isEnabled;
-            
-            toggle.addEventListener('change', (e) => {
-                const enabled = e.target.checked;
-                localStorage.setItem('faceRecognitionEnabled', enabled);
-                this.showToast(enabled ? 'Yüz tanıma arka plan analizi etkinleştirildi' : 'Arka plan analizi devre dışı bırakıldı');
+        const toggles = [
+            'auto-face', 'auto-bp', 'auto-sleep', 'auto-health', 'auto-google', 'auto-habits'
+        ];
+
+        toggles.forEach(id => {
+            const toggle = document.getElementById(id);
+            if (toggle) {
+                const isEnabled = localStorage.getItem(`setting-${id}`) === 'true';
+                toggle.checked = isEnabled;
+                
+                toggle.addEventListener('change', (e) => {
+                    const enabled = e.target.checked;
+                    localStorage.setItem(`setting-${id}`, enabled);
+                    this.showToast(enabled ? 'Özellik etkinleştirildi' : 'Özellik devre dışı bırakıldı');
+                });
+            }
+        });
+    },
+
+    toggleWhy(id) {
+        const section = document.getElementById(id);
+        if (section) {
+            const isActive = section.classList.toggle('active');
+            // Close others
+            document.querySelectorAll('.why-section').forEach(s => {
+                if (s.id !== id) s.classList.remove('active');
             });
         }
     }
