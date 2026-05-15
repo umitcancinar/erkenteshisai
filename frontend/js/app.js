@@ -695,8 +695,8 @@ const app = {
                     </div>
                 </div>
                 
-                <div style="margin-top: 30px; text-align: center; font-size: 13px; color: var(--text-muted);">
-                    <i class='bx bx-shield-quarter' style="color: var(--accent);"></i> Verileriniz Apple Secure Enclave teknolojisiyle şifrelenir.
+                <div style="margin-top: 50px; text-align: center; font-size: 24px; font-weight: 800; color: var(--accent); letter-spacing: 1px; text-transform: uppercase; animation: fadeIn 1s ease-out;">
+                    BU KISIM HENÜZ KULLANIMA AÇILMAMIŞTIR
                 </div>
             </div>
             
